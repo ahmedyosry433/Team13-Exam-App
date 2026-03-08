@@ -1,0 +1,14 @@
+{
+    "error_api_failure": {
+        "connectionError": "Failed to connect to the server",
+        "connectionTimeout": "Failed to connect to the server",
+        "cancelled": "The request to the server was cancelled",
+        "unknown": "An unexpected error occurred while connecting to the server, please try again later!",
+        "server_error": "Server error, please try again later!",
+        "receiveTimeout": "Failed to connect to the server while receiving data",
+        "sendTimeout": "Failed to connect to the server while sending data",
+        "unexpected_error": "An unexpected error occurred",
+        "badCertificate": "Invalid certificate from the server",
+        "expiredToken": "Session expired, please log in again"
+    }
+}
