@@ -26,6 +26,13 @@ dependencies:
   equatable: ^2.0.8
   easy_localization: ^3.0.8
   flutter_screenutil: ^5.9.3
+  flutter_svg: ^2.2.4
+  pinput: ^6.0.2
+  shimmer: ^3.0.0
+  toastification: ^3.0.3
+  image: ^4.8.0
+  image_picker: ^1.2.1
+  image_cropper: ^11.0.0
 
 dev_dependencies:
   flutter_test:
