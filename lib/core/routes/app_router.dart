@@ -1,4 +1,5 @@
 import 'package:exam_app/core/routes/routes.dart';
+import 'package:exam_app/features/splash/splash_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -7,7 +8,12 @@ final navigatorKey = GlobalKey<NavigatorState>();
 final GoRouter router = GoRouter(
   initialLocation: Routes.splash,
   navigatorKey: navigatorKey,
-  routes: [],
+  routes: [
+    _customAnimatedGoRoute(
+      route: Routes.splash,
+      page: (state, context) => const SplashPage(),
+    ),
+  ],
 );
 
 GoRoute _customAnimatedGoRoute({

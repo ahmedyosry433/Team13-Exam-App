@@ -14,10 +14,6 @@ class OnlineExam extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (kIsWeb) {
-      return _buildMaterialApp(context);
-    }
-
     return Platform.isIOS
         ? CupertinoTheme(
             data: CupertinoThemeData(
