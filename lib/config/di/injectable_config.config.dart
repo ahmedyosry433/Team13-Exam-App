@@ -19,7 +19,7 @@ import 'package:shared_preferences/shared_preferences.dart' as _i460;
 
 import '../../core/user_helper/user_helper.dart' as _i589;
 import '../api/app_interceptors.dart' as _i781;
-import 'register_module.dart' as _i746;
+import 'register_module.dart' as _i291;
 
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
@@ -59,4 +59,4 @@ extension GetItInjectableX on _i174.GetIt {
   }
 }
 
-class _$CoreInjectableModule extends _i746.CoreInjectableModule {}
+class _$CoreInjectableModule extends _i291.CoreInjectableModule {}
