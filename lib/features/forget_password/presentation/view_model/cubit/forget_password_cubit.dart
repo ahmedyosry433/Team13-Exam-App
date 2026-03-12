@@ -1,5 +1,4 @@
 // TODO: presentation Forget_passwordCubit
-import 'package:exam_app/config/base_response/base_response.dart';
 import 'package:exam_app/config/base_state/base_state.dart';
 import 'package:exam_app/core/classes/params.dart';
 import 'package:exam_app/core/languages/locale_keys.g.dart';
@@ -142,8 +141,9 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordStates> {
     final result = await _sendOtpUseCase(
       ForgetPasswordParams(email: emailController.text.trim()),
     );
-    switch (result) {
-      case Success():
+
+    result.when(
+      success: (value) {
         _nextPage();
         emit(
           state.copyWith(
@@ -152,18 +152,18 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordStates> {
             ),
           ),
         );
-        break;
-      case Error():
+      },
+      error: (exception) {
         emit(
           state.copyWith(
             sendCodeToEmailState: SendCodeToEmailState(
               state: StateType.error,
-              exception: result.exception,
+              exception: exception,
             ),
           ),
         );
-        break;
-    }
+      },
+    );
   }
 
   // ! verifyResetCode
@@ -186,25 +186,27 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordStates> {
     final result = await _verifyResetCodeUseCase(
       ForgetPasswordParams(code: codeController.text.trim()),
     );
-    switch (result) {
-      case Success():
+
+    result.when(
+      success: (value) {
         _nextPage();
         emit(
           state.copyWith(
             verifyCodeState: const VerifyCodeState(state: StateType.success),
           ),
         );
-        break;
-      case Error():
+      },
+      error: (exception) {
         emit(
           state.copyWith(
             verifyCodeState: VerifyCodeState(
               state: StateType.error,
-              exception: result.exception,
+              exception: exception,
             ),
           ),
         );
-    }
+      },
+    );
   }
 
   // ! resetPassword
@@ -220,8 +222,9 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordStates> {
         newPassword: newPasswordController.text.trim(),
       ),
     );
-    switch (result) {
-      case Success():
+
+    result.when(
+      success: (value) {
         emit(
           state.copyWith(
             resetPasswordState: const ResetPasswordState(
@@ -229,18 +232,18 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordStates> {
             ),
           ),
         );
-        break;
-      case Error():
+      },
+      error: (exception) {
         emit(
           state.copyWith(
             resetPasswordState: ResetPasswordState(
               state: StateType.error,
-              exception: result.exception,
+              exception: exception,
             ),
           ),
         );
-        break;
-    }
+      },
+    );
   }
 
   //! resend code use case
@@ -260,8 +263,9 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordStates> {
     final result = await _sendOtpUseCase(
       ForgetPasswordParams(email: emailController.text.trim()),
     );
-    switch (result) {
-      case Success():
+
+    result.when(
+      success: (value) {
         emit(
           state.copyWith(
             resendCodeToEmailState: const ResendCodeToEmailState(
@@ -269,18 +273,18 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordStates> {
             ),
           ),
         );
-        break;
-      case Error():
+      },
+      error: (exception) {
         emit(
           state.copyWith(
             resendCodeToEmailState: ResendCodeToEmailState(
               state: StateType.error,
-              exception: result.exception,
+              exception: exception,
             ),
           ),
         );
-        break;
-    }
+      },
+    );
   }
 
   // ! Obscure Text Changed
