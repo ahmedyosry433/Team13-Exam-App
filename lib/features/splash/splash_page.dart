@@ -45,7 +45,7 @@ class _SplashPageState extends State<SplashPage>
 
     Timer(const Duration(seconds: 4), () {
       if (mounted) {
-        context.go(Routes.login);
+        context.go(Routes.forgetPassword);
       }
     });
   }
