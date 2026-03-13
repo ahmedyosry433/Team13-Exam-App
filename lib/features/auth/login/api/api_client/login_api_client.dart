@@ -14,5 +14,5 @@ abstract class SigninApi {
   factory SigninApi(Dio dio) = _SigninApi;
 
   @POST(AppEndPoints.signinEndpoint)
-  Future<Signinresponce> signin(@Body() SigninRequest inrequest);
+  Future<SigninResponse> signin(@Body() SigninRequest inrequest);
 }
