@@ -18,6 +18,13 @@ import 'package:internet_connection_checker_plus/internet_connection_checker_plu
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
 
 import '../../core/user_helper/user_helper.dart' as _i589;
+import '../../features/auth/login/api/api_client/login_api_client.dart' as _i32;
+import '../../features/auth/login/api/data_sources/login_remote_data_source_impl.dart'
+    as _i584;
+import '../../features/auth/login/data/data_sources/login_remote_data_source_contract.dart'
+    as _i183;
+import '../../features/auth/register/api/api_client/register_api_client.dart'
+    as _i517;
 import '../api/app_interceptors.dart' as _i781;
 import 'register_module.dart' as _i291;
 
@@ -43,11 +50,16 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i161.InternetConnection>(
       () => coreInjectableModule.internetConnection(),
     );
+    gh.factory<_i32.SigninApi>(() => _i32.SigninApi(gh<_i361.Dio>()));
+    gh.factory<_i517.SignupApi>(() => _i517.SignupApi(gh<_i361.Dio>()));
     gh.singleton<_i781.AppInterceptors>(
       () => _i781.AppInterceptors(
         dio: gh<_i361.Dio>(),
         fss: gh<_i558.FlutterSecureStorage>(),
       ),
+    );
+    gh.factory<_i183.LoginRemoteDataSourceContract>(
+      () => _i584.LoginRemoteDataSourceImpl(gh<_i32.SigninApi>()),
     );
     gh.factory<_i589.UserHelper>(
       () => _i589.UserHelper(
