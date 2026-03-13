@@ -1,4 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:exam_app/core/routes/routes.dart';
+import 'package:exam_app/features/forget_password/presentation/view/pages/forget_password_page.dart';
 import 'package:exam_app/features/splash/splash_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -12,6 +14,12 @@ final GoRouter router = GoRouter(
     _customAnimatedGoRoute(
       route: Routes.splash,
       page: (state, context) => const SplashPage(),
+    ),
+    _customAnimatedGoRoute(
+      route: Routes.forgetPassword,
+      page: (state, context) => ForgetPasswordPage(
+        key: ValueKey(context.locale.languageCode.toString()),
+      ),
     ),
   ],
 );
