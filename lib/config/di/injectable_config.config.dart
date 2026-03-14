@@ -90,10 +90,11 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i32.SigninApi>(() => _i32.SigninApi(gh<_i361.Dio>()));
     gh.factory<_i517.SignupApi>(() => _i517.SignupApi(gh<_i361.Dio>()));
-    gh.factory<_i183.LoginRemoteDataSourceContract>(
-      () => _i584.LoginRemoteDataSourceImpl(gh<_i32.SigninApi>()),
     gh.factory<_i892.ForgetPasswordApiClient>(
       () => _i892.ForgetPasswordApiClient(gh<_i361.Dio>()),
+    );
+    gh.factory<_i183.LoginRemoteDataSourceContract>(
+      () => _i584.LoginRemoteDataSourceImpl(gh<_i32.SigninApi>()),
     );
     gh.singleton<_i781.AppInterceptors>(
       () => _i781.AppInterceptors(
@@ -101,12 +102,13 @@ extension GetItInjectableX on _i174.GetIt {
         fss: gh<_i558.FlutterSecureStorage>(),
       ),
     );
-    gh.factory<_i953.RegisterRemoteDataSourceContract>(
-      () => _i743.RegisterRemoteDataSourceImpl(gh<_i517.SignupApi>()),
     gh.factory<_i913.ForgetPasswordRemoteDataSourceContract>(
       () => _i358.ForgetPasswordRemoteDataSourceImpl(
         apiClient: gh<_i892.ForgetPasswordApiClient>(),
       ),
+    );
+    gh.factory<_i953.RegisterRemoteDataSourceContract>(
+      () => _i743.RegisterRemoteDataSourceImpl(gh<_i517.SignupApi>()),
     );
     gh.factory<_i129.ForgetPasswordRepository>(
       () => _i787.ForgetPasswordRepositoryImpl(
@@ -137,14 +139,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i953.RegisterRemoteDataSourceContract>(),
       ),
     );
-    gh.factory<_i21.RegisterUseCase>(
-      () => _i21.RegisterUseCase(
-        repository: gh<_i57.RegisterRepositoryContract>(),
-      ),
-    );
-    gh.factory<_i444.RegisterCubit>(
-      () => _i444.RegisterCubit(gh<_i21.RegisterUseCase>()),
-    );
     gh.factory<_i56.ResetPasswordUseCase>(
       () => _i56.ResetPasswordUseCase(gh<_i129.ForgetPasswordRepository>()),
     );
@@ -157,6 +151,14 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i798.VerifyResetCodeUseCase>(),
         gh<_i56.ResetPasswordUseCase>(),
       ),
+    );
+    gh.factory<_i21.RegisterUseCase>(
+      () => _i21.RegisterUseCase(
+        repository: gh<_i57.RegisterRepositoryContract>(),
+      ),
+    );
+    gh.factory<_i444.RegisterCubit>(
+      () => _i444.RegisterCubit(gh<_i21.RegisterUseCase>()),
     );
     return this;
   }

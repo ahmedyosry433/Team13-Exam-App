@@ -40,6 +40,15 @@ class _LoginTextFieldState extends State<LoginTextField> {
             textStyle: 16.regular.copyWith(color: AppColors.gray),
             textInputType: TextInputType.emailAddress,
             errorText: widget.emailError,
+            enabledBorder: widget.emailError != null
+                ? customOutLineBorders(borderColor: AppColors.onErrorLight)
+                : null,
+            focusedBorder: widget.emailError != null
+                ? customOutLineBorders(
+                    borderColor: AppColors.onErrorLight,
+                    borderWidth: 1.5,
+                  )
+                : null,
           ),
         ),
         const SizedBox(height: 24),
@@ -51,23 +60,31 @@ class _LoginTextFieldState extends State<LoginTextField> {
               style: 14.light.copyWith(color: AppColors.gray),
             ),
             controller: widget.passwordController,
+            enabledBorder: widget.passwordError != null
+                ? customOutLineBorders(borderColor: AppColors.onErrorLight)
+                : null,
+            focusedBorder: widget.passwordError != null
+                ? customOutLineBorders(
+                    borderColor: AppColors.onErrorLight,
+                    borderWidth: 1.5,
+                  )
+                : null,
+
             isObscureText: isPasswordHidden,
-                  suffixWidget: IconButton(
-                    icon: Icon(
-                      isPasswordHidden
-                          ? Icons.visibility_off
-                          : Icons.visibility,
-                      color: AppColors.gray,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        isPasswordHidden = !isPasswordHidden;
-                      });
-                    },
-                  ),
+            suffixWidget: IconButton(
+              icon: Icon(
+                isPasswordHidden ? Icons.visibility_off : Icons.visibility,
+                color: AppColors.gray,
+              ),
+              onPressed: () {
+                setState(() {
+                  isPasswordHidden = !isPasswordHidden;
+                });
+              },
+            ),
             hintText: AuthConsts.passwordHint,
             textStyle: 16.regular.copyWith(color: AppColors.gray),
-            errorText:widget.passwordError
+            errorText: widget.passwordError,
           ),
         ),
       ],

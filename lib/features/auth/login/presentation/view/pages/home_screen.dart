@@ -10,7 +10,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(leading: IconButton(
     icon: const Icon(Icons.arrow_back_ios,color: Colors.black,),
-    onPressed: () => context.pushReplacement(Routes.login),),
+    onPressed: () => context.go(Routes.login),),
         title: Text('Home Screen'),
       ),
     );

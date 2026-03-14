@@ -41,7 +41,7 @@ final GoRouter router = GoRouter(
       route: Routes.home,
       page: (state, context) =>
           HomeScreen(key: ValueKey(context.locale.languageCode.toString())),
-    ),
+    ), _customAnimatedGoRoute(
       route: Routes.forgetPassword,
       page: (state, context) => ForgetPasswordPage(
         key: ValueKey(context.locale.languageCode.toString()),
