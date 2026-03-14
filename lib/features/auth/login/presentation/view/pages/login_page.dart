@@ -99,7 +99,9 @@ class _LoginPageState extends State<LoginPage> {
                       Padding(
                         padding: const EdgeInsets.only(left: AppSize.s86),
                         child: InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            context.push(Routes.forgetPassword);
+                          },
                           child: Text(
                             AuthConsts.forgotPassword,
                             style: 12.regular.copyWith(
