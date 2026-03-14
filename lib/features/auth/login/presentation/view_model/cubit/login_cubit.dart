@@ -1,4 +1,3 @@
-
 // ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
 import 'package:exam_app/config/di/injectable_config.dart';
@@ -13,6 +12,7 @@ import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
 
 part 'login_state.dart';
+
 @Injectable()
 class LoginCubit extends Cubit<LoginState> {
   final LoginUseCase _loginUseCase = getIt<LoginUseCase>();
@@ -40,28 +40,33 @@ class LoginCubit extends Cubit<LoginState> {
     }
     if (password.isEmpty || password.length < 8) {
       emit(
-        state.copyWith(isLoading: false, passwordError: AuthConsts.errorpassword),
+        state.copyWith(
+          isLoading: false,
+          passwordError: AuthConsts.errorpassword,
+        ),
       );
       return;
     }
 
-    final result = await _loginUseCase(SigninRequest(email: email, password: password));
+    final result = await _loginUseCase(
+      SigninRequest(email: email, password: password),
+    );
 
     result.when(
       success: (entity) async {
         if (state.rememberMe) {
           await _fss.write(key: 'token', value: entity!.token);
+        } else {
+          await _fss.delete(key: 'token');
         }
         emit(state.copyWith(isLoading: false, loginSuccess: true));
       },
       error: (exception) {
-  final message = exception is Failures
-      ? exception.errorMessage
-      : AuthConsts.loginError;
-  emit(
-    state.copyWith(isLoading: false, generalError: message),
-  );
-},
+        final message = exception is Failures
+            ? exception.errorMessage
+            : AuthConsts.loginError;
+        emit(state.copyWith(isLoading: false, generalError: message));
+      },
     );
   }
 

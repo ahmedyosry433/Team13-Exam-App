@@ -23,7 +23,7 @@ class LoginTextField extends StatefulWidget {
 }
 
 class _LoginTextFieldState extends State<LoginTextField> {
-  bool isPasswordHidden = false;
+  bool isPasswordHidden = true;
   @override
   Widget build(BuildContext context) {
     return Column(
