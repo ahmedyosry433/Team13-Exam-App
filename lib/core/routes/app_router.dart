@@ -6,7 +6,6 @@ import 'package:exam_app/features/auth/login/presentation/view/pages/login_page.
 import 'package:exam_app/features/auth/login/presentation/view_model/cubit/login_cubit.dart';
 import 'package:exam_app/features/auth/register/presentation/view/pages/register_page.dart';
 import 'package:exam_app/features/auth/register/presentation/view_model/cubit/register_cubit.dart';
-import 'package:exam_app/core/routes/routes.dart';
 import 'package:exam_app/features/forget_password/presentation/view/pages/forget_password_page.dart';
 import 'package:exam_app/features/splash/splash_page.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +33,9 @@ final GoRouter router = GoRouter(
       route: Routes.register,
       page: (state, context) => BlocProvider(
         create: (context) => getIt<RegisterCubit>(),
-        child: RegisterPage(key: ValueKey(context.locale.languageCode.toString())),
+        child: RegisterPage(
+          key: ValueKey(context.locale.languageCode.toString()),
+        ),
       ),
     ),
     _customAnimatedGoRoute(
@@ -42,6 +43,7 @@ final GoRouter router = GoRouter(
       page: (state, context) =>
           HomeScreen(key: ValueKey(context.locale.languageCode.toString())),
     ),
+    _customAnimatedGoRoute(
       route: Routes.forgetPassword,
       page: (state, context) => ForgetPasswordPage(
         key: ValueKey(context.locale.languageCode.toString()),
