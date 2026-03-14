@@ -29,9 +29,9 @@ class LoginState {
     return LoginState(
       isLoading: isLoading ?? this.isLoading,
       rememberMe: rememberMe ?? this.rememberMe,
-      emailError: emailError,
-      passwordError: passwordError,
-      generalError: generalError,
+      emailError: emailError ?? this.emailError,
+      passwordError: passwordError ?? this.passwordError,
+      generalError: generalError ?? this.generalError,
       loginSuccess: loginSuccess ?? this.loginSuccess,
     );
   }

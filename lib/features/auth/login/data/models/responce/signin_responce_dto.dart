@@ -36,7 +36,7 @@ class Dto {
     this.createdAt,
   });
 
-  // هنا ال toDomain() صح
+  
   SigninEntity toDomain() => SigninEntity(
         username: username ?? '',
         firstName: firstName ?? '',
@@ -49,7 +49,7 @@ class Dto {
         createdAt: createdAt ?? DateTime.now(),
       );
 
-  // JSON
+
   factory Dto.fromJson(Map<String, dynamic> json) => _$DtoFromJson(json);
   Map<String, dynamic> toJson() => _$DtoToJson(this);
 }

@@ -15,10 +15,9 @@ class LoginRemoteDataSourceImpl implements LoginRemoteDataSourceContract {
   Future<Result<SigninResponse>> signin(SigninRequest inrequest) async {
     try {
       final responce = await signinApi.signin(inrequest);
-        print( "User data stored in secure storage:--------------------------------------- ${responce.user}");
       return Success<SigninResponse>(data: responce);
     } on DioException catch (e) {
-      throw ServerFailure.fromDioException(dioException: e);
+      return Error(exception: ServerFailure.fromDioException(dioException: e));
     }
   }
 }

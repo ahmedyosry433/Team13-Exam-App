@@ -2,10 +2,11 @@
 // ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
 import 'package:exam_app/config/di/injectable_config.dart';
+import 'package:exam_app/config/error/failures.dart';
 import 'package:exam_app/core/routes/routes.dart';
 import 'package:exam_app/features/auth/common/auth_consts/auth_consts.dart';
 import 'package:exam_app/features/auth/login/data/models/request/signin_request.dart';
-import 'package:exam_app/features/auth/login/domain/repositories/login_repository.dart';
+import 'package:exam_app/features/auth/login/domain/use_case/login_use_case.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
@@ -14,7 +15,7 @@ import 'package:injectable/injectable.dart';
 part 'login_state.dart';
 @Injectable()
 class LoginCubit extends Cubit<LoginState> {
-  final LoginRepositoryContract _repo = getIt<LoginRepositoryContract>();
+  final LoginUseCase _loginUseCase = getIt<LoginUseCase>();
   final FlutterSecureStorage _fss = getIt<FlutterSecureStorage>();
 
   LoginCubit() : super(LoginState());
@@ -44,9 +45,7 @@ class LoginCubit extends Cubit<LoginState> {
       return;
     }
 
-    final result = await _repo.signin(
-      SigninRequest(email: email, password: password),
-    );
+    final result = await _loginUseCase(SigninRequest(email: email, password: password));
 
     result.when(
       success: (entity) async {
@@ -56,17 +55,20 @@ class LoginCubit extends Cubit<LoginState> {
         emit(state.copyWith(isLoading: false, loginSuccess: true));
       },
       error: (exception) {
-        emit(
-          state.copyWith(isLoading: false, generalError: AuthConsts.loginError),
-        );
-      },
+  final message = exception is Failures
+      ? exception.errorMessage
+      : AuthConsts.loginError;
+  emit(
+    state.copyWith(isLoading: false, generalError: message),
+  );
+},
     );
   }
 
   Future<void> autoLoginIfTokenExists(BuildContext context) async {
     final token = await _fss.read(key: 'token');
     if (token != null) {
-      context.go(Routes.home);
+      context.push(Routes.home);
     }
   }
 }

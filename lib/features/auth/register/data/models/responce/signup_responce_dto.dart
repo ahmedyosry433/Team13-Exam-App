@@ -1,3 +1,4 @@
+import 'package:exam_app/features/auth/register/domain/entity/register_entity.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'signup_responce_dto.g.dart';
 
@@ -33,6 +34,18 @@ class Dto {
     this.id,
     this.createdAt,
   });
+  
+  SignupEntity toDomain() => SignupEntity(
+        username: username ?? '',
+        firstName: firstName ?? '',
+        lastName: lastName ?? '',
+        email: email ?? '',
+        phone: phone ?? '',
+        role: role ?? '',
+        isVerified: isVerified ?? false,
+        id: id ?? '',
+        createdAt: createdAt ?? DateTime.now(),
+      );
 
   factory Dto.fromJson(Map<String, dynamic> json) => _$DtoFromJson(json);
 

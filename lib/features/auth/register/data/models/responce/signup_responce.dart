@@ -1,5 +1,5 @@
 
-import 'package:exam_app/features/auth/login/data/models/responce/signin_responce_dto.dart';
+import 'package:exam_app/features/auth/register/data/models/responce/signup_responce_dto.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'dart:convert';
 

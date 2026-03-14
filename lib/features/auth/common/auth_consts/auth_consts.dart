@@ -25,4 +25,11 @@ abstract class AuthConsts {
   static const String erroruser = "User data not found ";
   static const String erroremail = "Invalid email";
   static const String errorpassword = "Incorrect password";
+  static const String errorusername = "Username cannot be empty";
+  static const String errorfirstname = "First name cannot be empty";
+  static const String errorlastname = "Last name cannot be empty";
+  static const String errorconfirmpassword = "Passwords not match";
+  static const String errorphone = "Invalid phone number";
+  static const String registerError = '"Registration Failed.';
+  
 }

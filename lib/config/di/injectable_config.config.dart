@@ -32,6 +32,18 @@ import '../../features/auth/login/presentation/view_model/cubit/login_cubit.dart
     as _i609;
 import '../../features/auth/register/api/api_client/register_api_client.dart'
     as _i517;
+import '../../features/auth/register/api/data_sources/register_remote_data_source_impl.dart'
+    as _i743;
+import '../../features/auth/register/data/data_sources/register_remote_data_source_contract.dart'
+    as _i953;
+import '../../features/auth/register/data/repositories/register_repository_impl.dart'
+    as _i200;
+import '../../features/auth/register/domain/repositories/register_repository.dart'
+    as _i57;
+import '../../features/auth/register/domain/use_case/register_use_case.dart'
+    as _i21;
+import '../../features/auth/register/presentation/view_model/cubit/register_cubit.dart'
+    as _i444;
 import '../api/app_interceptors.dart' as _i781;
 import 'register_module.dart' as _i291;
 
@@ -69,6 +81,9 @@ extension GetItInjectableX on _i174.GetIt {
         fss: gh<_i558.FlutterSecureStorage>(),
       ),
     );
+    gh.factory<_i953.RegisterRemoteDataSourceContract>(
+      () => _i743.RegisterRemoteDataSourceImpl(gh<_i517.SignupApi>()),
+    );
     gh.factory<_i589.UserHelper>(
       () => _i589.UserHelper(
         gh<_i460.SharedPreferences>(),
@@ -81,6 +96,19 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i630.LoginUseCase>(
       () => _i630.LoginUseCase(repository: gh<_i176.LoginRepositoryContract>()),
+    );
+    gh.factory<_i57.RegisterRepositoryContract>(
+      () => _i200.RegisterRepositoryImpl(
+        gh<_i953.RegisterRemoteDataSourceContract>(),
+      ),
+    );
+    gh.factory<_i21.RegisterUseCase>(
+      () => _i21.RegisterUseCase(
+        repository: gh<_i57.RegisterRepositoryContract>(),
+      ),
+    );
+    gh.factory<_i444.RegisterCubit>(
+      () => _i444.RegisterCubit(gh<_i21.RegisterUseCase>()),
     );
     return this;
   }

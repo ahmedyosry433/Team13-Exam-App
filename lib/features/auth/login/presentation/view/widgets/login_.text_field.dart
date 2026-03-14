@@ -2,10 +2,9 @@ import 'package:exam_app/core/shared/widgets/custom_text_field.dart';
 import 'package:exam_app/core/theme/app_colors.dart';
 import 'package:exam_app/core/theme/app_text_style.dart';
 import 'package:exam_app/features/auth/common/auth_consts/auth_consts.dart';
-import 'package:exam_app/features/auth/common/auth_consts/auth_validators/auth_validaters.dart';
 import 'package:flutter/material.dart';
 
-class LoginTextField extends StatelessWidget {
+class LoginTextField extends StatefulWidget {
   final TextEditingController emailController;
   final TextEditingController passwordController;
   final String? emailError;
@@ -20,6 +19,12 @@ class LoginTextField extends StatelessWidget {
   });
 
   @override
+  State<LoginTextField> createState() => _LoginTextFieldState();
+}
+
+class _LoginTextFieldState extends State<LoginTextField> {
+  bool isPasswordHidden = false;
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
@@ -30,16 +35,11 @@ class LoginTextField extends StatelessWidget {
               AuthConsts.emaillable,
               style: 14.light.copyWith(color: AppColors.gray),
             ),
-            controller: emailController,
+            controller: widget.emailController,
             hintText: AuthConsts.emailHint,
             textStyle: 16.regular.copyWith(color: AppColors.gray),
             textInputType: TextInputType.emailAddress,
-            errorText:
-                emailError ??
-                (emailController.text.isNotEmpty &&
-                        !AuthValidators.isValidEmail(emailController.text)
-                    ? AuthConsts.erroremail
-                    : null),
+            errorText: widget.emailError,
           ),
         ),
         const SizedBox(height: 24),
@@ -50,16 +50,24 @@ class LoginTextField extends StatelessWidget {
               AuthConsts.passwordlable,
               style: 14.light.copyWith(color: AppColors.gray),
             ),
-            controller: passwordController,
-            isObscureText: true,
+            controller: widget.passwordController,
+            isObscureText: isPasswordHidden,
+                  suffixWidget: IconButton(
+                    icon: Icon(
+                      isPasswordHidden
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                      color: AppColors.gray,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        isPasswordHidden = !isPasswordHidden;
+                      });
+                    },
+                  ),
             hintText: AuthConsts.passwordHint,
             textStyle: 16.regular.copyWith(color: AppColors.gray),
-            errorText:
-                passwordError ??
-                (passwordController.text.isNotEmpty &&
-                        !AuthValidators.isValidPassword(passwordController.text)
-                    ? AuthConsts.errorpassword
-                    : null),
+            errorText:widget.passwordError
           ),
         ),
       ],

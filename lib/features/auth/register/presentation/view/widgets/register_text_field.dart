@@ -5,7 +5,46 @@ import 'package:exam_app/features/auth/common/auth_consts/auth_consts.dart';
 import 'package:flutter/material.dart';
 
 class RegisterTextField extends StatelessWidget {
-  const RegisterTextField({super.key});
+  final TextEditingController usernameController;
+  final TextEditingController firstNameController;
+  final TextEditingController lastNameController;
+  final TextEditingController emailController;
+  final TextEditingController passwordController;
+  final TextEditingController confirmPasswordController;
+  final TextEditingController phoneController;
+  final String? usernameError;
+  final String? firstNameError;
+  final String? lastNameError;
+  final String? emailError;
+  final String? passwordError;
+  final String? confirmPasswordError;
+  final String? phoneError;
+  final bool isPasswordHidden;
+  final bool isConfirmPasswordHidden;
+  final VoidCallback onTogglePassword;
+  final VoidCallback onToggleConfirmPassword;
+
+  const RegisterTextField({
+    super.key,
+    required this.usernameController,
+    required this.firstNameController,
+    required this.lastNameController,
+    required this.emailController,
+    required this.passwordController,
+    required this.confirmPasswordController,
+    required this.phoneController,
+    required this.isPasswordHidden,
+    required this.isConfirmPasswordHidden,
+    required this.onTogglePassword,
+    required this.onToggleConfirmPassword,
+    this.usernameError,
+    this.firstNameError,
+    this.lastNameError,
+    this.emailError,
+    this.passwordError,
+    this.confirmPasswordError,
+    this.phoneError,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +59,10 @@ class RegisterTextField extends StatelessWidget {
             ),
             hintText: AuthConsts.usernameHint,
             textStyle: 16.regular.copyWith(color: AppColors.gray),
+            controller: usernameController,
+            errorText: usernameError,
           ),
         ),
-
         Padding(
           padding: const EdgeInsets.only(top: 24, left: 16, right: 16),
           child: Row(
@@ -35,6 +75,8 @@ class RegisterTextField extends StatelessWidget {
                   ),
                   hintText: AuthConsts.firstnameHint,
                   textStyle: 16.regular.copyWith(color: AppColors.gray),
+                  controller: firstNameController,
+                  errorText: firstNameError,
                 ),
               ),
               const SizedBox(width: 16),
@@ -46,6 +88,8 @@ class RegisterTextField extends StatelessWidget {
                   ),
                   hintText: AuthConsts.lastnameHint,
                   textStyle: 16.regular.copyWith(color: AppColors.gray),
+                  controller: lastNameController,
+                  errorText: lastNameError,
                 ),
               ),
             ],
@@ -60,6 +104,9 @@ class RegisterTextField extends StatelessWidget {
             ),
             hintText: AuthConsts.emailHint,
             textStyle: 16.regular.copyWith(color: AppColors.gray),
+            controller: emailController,
+            textInputType: TextInputType.emailAddress,
+            errorText: emailError,
           ),
         ),
         Padding(
@@ -73,7 +120,19 @@ class RegisterTextField extends StatelessWidget {
                     style: 14.light.copyWith(color: AppColors.gray),
                   ),
                   hintText: AuthConsts.passwordHint,
-                textStyle: 16.regular.copyWith(color: AppColors.gray),
+                  textStyle: 16.regular.copyWith(color: AppColors.gray),
+                  controller: passwordController,
+                  isObscureText: isPasswordHidden,
+                  suffixWidget: IconButton(
+                    icon: Icon(
+                      isPasswordHidden
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                      color: AppColors.gray,
+                    ),
+                    onPressed: onTogglePassword,
+                  ),
+                  errorText: passwordError,
                 ),
               ),
               const SizedBox(width: 16),
@@ -85,6 +144,18 @@ class RegisterTextField extends StatelessWidget {
                   ),
                   hintText: AuthConsts.confirmpasswordHint,
                   textStyle: 16.regular.copyWith(color: AppColors.gray),
+                  controller: confirmPasswordController,
+                  isObscureText: isConfirmPasswordHidden,
+                  suffixWidget: IconButton(
+                    icon: Icon(
+                      isConfirmPasswordHidden
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                      color: AppColors.gray,
+                    ),
+                    onPressed: onToggleConfirmPassword,
+                  ),
+                  errorText: confirmPasswordError,
                 ),
               ),
             ],
@@ -99,6 +170,9 @@ class RegisterTextField extends StatelessWidget {
             ),
             hintText: AuthConsts.phoneHint,
             textStyle: 16.regular.copyWith(color: AppColors.gray),
+            controller: phoneController,
+            textInputType: TextInputType.phone,
+            errorText: phoneError,
           ),
         ),
         const SizedBox(height: 24),
