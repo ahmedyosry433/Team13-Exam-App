@@ -1,6 +1,16 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:exam_app/config/di/injectable_config.dart';
 import 'package:exam_app/core/routes/routes.dart';
+import 'package:exam_app/features/auth/login/presentation/view/pages/home_screen.dart';
+import 'package:exam_app/features/auth/login/presentation/view/pages/login_page.dart';
+import 'package:exam_app/features/auth/login/presentation/view_model/cubit/login_cubit.dart';
+import 'package:exam_app/features/auth/register/presentation/view/pages/register_page.dart';
+import 'package:exam_app/features/auth/register/presentation/view_model/cubit/register_cubit.dart';
+import 'package:exam_app/core/routes/routes.dart';
+import 'package:exam_app/features/forget_password/presentation/view/pages/forget_password_page.dart';
 import 'package:exam_app/features/splash/splash_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
@@ -12,6 +22,30 @@ final GoRouter router = GoRouter(
     _customAnimatedGoRoute(
       route: Routes.splash,
       page: (state, context) => const SplashPage(),
+    ),
+    _customAnimatedGoRoute(
+      route: Routes.login,
+      page: (state, context) => BlocProvider(
+        create: (context) => getIt<LoginCubit>(),
+        child: LoginPage(key: ValueKey(context.locale.languageCode.toString())),
+      ),
+    ),
+    _customAnimatedGoRoute(
+      route: Routes.register,
+      page: (state, context) => BlocProvider(
+        create: (context) => getIt<RegisterCubit>(),
+        child: RegisterPage(key: ValueKey(context.locale.languageCode.toString())),
+      ),
+    ),
+    _customAnimatedGoRoute(
+      route: Routes.home,
+      page: (state, context) =>
+          HomeScreen(key: ValueKey(context.locale.languageCode.toString())),
+    ), _customAnimatedGoRoute(
+      route: Routes.forgetPassword,
+      page: (state, context) => ForgetPasswordPage(
+        key: ValueKey(context.locale.languageCode.toString()),
+      ),
     ),
   ],
 );
