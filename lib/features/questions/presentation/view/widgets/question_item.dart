@@ -7,13 +7,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class QuestionItem extends StatelessWidget {
   final QuestionEntity question;
-  final String? selectedAnswerKey;
+  final List<String> selectedAnswerKeys;
   final Function(String) onAnswerSelected;
 
   const QuestionItem({
     super.key,
     required this.question,
-    required this.selectedAnswerKey,
+    required this.selectedAnswerKeys,
     required this.onAnswerSelected,
   });
 
@@ -38,7 +38,7 @@ class QuestionItem extends StatelessWidget {
                 return AnswerItem(
                   answer: answer,
                   type: question.type ?? QuestionType.single,
-                  isSelected: selectedAnswerKey == answer.answerKey,
+                  isSelected: selectedAnswerKeys.contains(answer.answerKey),
                   onTap: () => onAnswerSelected(answer.answerKey!),
                 );
               },

@@ -14,14 +14,14 @@ class QuestionsLoading extends QuestionsStates {}
 class QuestionsLoaded extends QuestionsStates {
   final List<QuestionEntity> questions;
   final int currentIndex;
-  final Map<int, String?> selectedAnswers;
+  final Map<int, List<String>> selectedAnswers;
   final int secondsRemaining;
 
   const QuestionsLoaded({
     required this.questions,
     this.currentIndex = 0,
     this.selectedAnswers = const {},
-    this.secondsRemaining = 30,
+    this.secondsRemaining = 5,
   });
 
   @override
@@ -35,7 +35,7 @@ class QuestionsLoaded extends QuestionsStates {
   QuestionsLoaded copyWith({
     List<QuestionEntity>? questions,
     int? currentIndex,
-    Map<int, String?>? selectedAnswers,
+    Map<int, List<String>>? selectedAnswers,
     int? secondsRemaining,
   }) {
     return QuestionsLoaded(

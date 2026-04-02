@@ -2,12 +2,19 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:exam_app/core/routes/app_router.dart';
+import 'package:exam_app/core/routes/routes.dart';
+import 'package:exam_app/core/shared/widgets/custom_button.dart';
+import 'package:exam_app/core/theme/app_colors.dart';
+import 'package:exam_app/core/theme/app_text_style.dart';
+import 'package:exam_app/core/values/app_animations.dart';
 import 'package:exam_app/features/questions/domain/entities/answer_entity.dart';
 import 'package:exam_app/features/questions/domain/entities/question_entity.dart';
 import 'package:exam_app/features/questions/domain/use_cases/get_questions_by_exam_id_use_case.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
+import 'package:lottie/lottie.dart';
 
 part 'questions_states.dart';
 
@@ -45,9 +52,37 @@ class QuestionsCubit extends Cubit<QuestionsStates> {
             ),
           );
         } else {
-          showAboutDialog(
+          showDialog(
             context: navigatorKey.currentContext!,
-            children: [Text('Time is up')],
+            barrierDismissible: false,
+            builder: (context) => AlertDialog(
+              backgroundColor: AppColors.white,
+              title: Center(
+                child: Text(
+                  "Time out!",
+                  style: 18.medium.copyWith(color: AppColors.redCC),
+                ),
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Lottie.asset(
+                    AppAnimations.timeAnimation,
+                    width: 170,
+                    height: 170,
+                  ),
+
+                  CustomButton(
+                    height: 35,
+                    title: "View score",
+                    onTap: () {
+                      context.push(Routes.question);
+                    },
+                  ),
+                ],
+              ),
+            ),
           );
           _timer?.cancel();
         }
@@ -58,10 +93,28 @@ class QuestionsCubit extends Cubit<QuestionsStates> {
   void selectAnswer(int questionIndex, String answerKey) {
     final currentState = state;
     if (currentState is QuestionsLoaded) {
-      final updatedAnswers = Map<int, String?>.from(
+      final question = currentState.questions[questionIndex];
+      final updatedAnswers = Map<int, List<String>>.from(
         currentState.selectedAnswers,
       );
-      updatedAnswers[questionIndex] = answerKey;
+
+      final currentSelected = List<String>.from(
+        updatedAnswers[questionIndex] ?? [],
+      );
+
+      if (question.type == QuestionType.multi) {
+        if (currentSelected.contains(answerKey)) {
+          currentSelected.remove(answerKey);
+        } else {
+          currentSelected.add(answerKey);
+        }
+      } else {
+        // For single choice, replace the list with only the new answer
+        currentSelected.clear();
+        currentSelected.add(answerKey);
+      }
+
+      updatedAnswers[questionIndex] = currentSelected;
       emit(currentState.copyWith(selectedAnswers: updatedAnswers));
     }
   }
@@ -105,7 +158,7 @@ class QuestionsCubit extends Cubit<QuestionsStates> {
 
   List<QuestionEntity> _getMockQuestions() {
     return List.generate(
-      20,
+      10,
       (index) => QuestionEntity(
         id: '$index',
         question:

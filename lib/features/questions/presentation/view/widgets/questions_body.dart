@@ -46,7 +46,7 @@ class QuestionsPageBody extends StatelessWidget {
                       final question = state.questions[index];
                       return QuestionItem(
                         question: question,
-                        selectedAnswerKey: state.selectedAnswers[index],
+                        selectedAnswerKeys: state.selectedAnswers[index] ?? [],
                         onAnswerSelected: (key) =>
                             cubit.selectAnswer(index, key),
                       );
