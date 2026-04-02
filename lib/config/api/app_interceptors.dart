@@ -7,6 +7,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
 
 import 'status_code.dart';
+// الكلاس ده بيعمل  بيضيف التوكين تلقائى فكل ريكويست  وكمان لو صلاحسة التوكين خلصت  بيعمل لوج اوت تلقائى كمان بيلغى الريكويست لو حصل مشكلة
 
 @singleton
 class AppInterceptors extends Interceptor {
