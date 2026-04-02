@@ -96,16 +96,10 @@ class CheckBoxSelection extends StatelessWidget {
             color: AppColors.primaryLight,
             size: AppSize.s24,
           )
-        : Container(
-            width: AppSize.s20,
-            height: AppSize.s20,
-            decoration: BoxDecoration(
-              shape: BoxShape.rectangle,
-              border: Border.all(
-                color: AppColors.primaryLight,
-                width: AppSize.s2,
-              ),
-            ),
+        : Icon(
+            Icons.check_box_outline_blank,
+            color: AppColors.primaryLight,
+            size: AppSize.s24,
           );
   }
 }
