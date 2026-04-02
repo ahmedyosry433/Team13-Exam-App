@@ -1,4 +1,5 @@
 import 'package:exam_app/core/shared/widgets/custom_button.dart';
+import 'package:exam_app/core/shared/widgets/custom_page_loading.dart';
 import 'package:exam_app/core/theme/app_colors.dart';
 import 'package:exam_app/core/theme/app_text_style.dart';
 import 'package:exam_app/core/values/app_size.dart';
@@ -16,12 +17,10 @@ class QuestionsPageBody extends StatelessWidget {
     return BlocBuilder<QuestionsCubit, QuestionsStates>(
       builder: (context, state) {
         if (state is QuestionsLoading) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (state is QuestionsError) {
+          return const CustomPageLoading();
+        } else if (state is QuestionsError) {
           return Center(child: Text(state.message));
-        }
-        if (state is QuestionsLoaded) {
+        } else if (state is QuestionsLoaded) {
           final cubit = context.read<QuestionsCubit>();
           return SafeArea(
             bottom: true,
@@ -77,9 +76,15 @@ class QuestionsPageBody extends StatelessWidget {
                       ],
                       Expanded(
                         child: CustomButton(
-                          onTap: () => cubit.nextQuestion(),
+                          onTap: () {
+                            if (state.currentIndex ==
+                                state.questions.length - 1) {
+                              cubit.submitExam();
+                            } else {
+                              cubit.nextQuestion();
+                            }
+                          },
                           radius: AppSize.s8,
-
                           title:
                               state.currentIndex == state.questions.length - 1
                               ? 'Finish'

@@ -55,3 +55,28 @@ class QuestionsError extends QuestionsStates {
   @override
   List<Object?> get props => [message];
 }
+
+class QuestionsResult extends QuestionsStates {
+  final int correctCount;
+  final int incorrectCount;
+  final double scorePercentage;
+  final List<QuestionEntity> questions;
+  final Map<int, List<String>> selectedAnswers;
+
+  const QuestionsResult({
+    required this.correctCount,
+    required this.incorrectCount,
+    required this.scorePercentage,
+    required this.questions,
+    required this.selectedAnswers,
+  });
+
+  @override
+  List<Object?> get props => [
+    correctCount,
+    incorrectCount,
+    scorePercentage,
+    questions,
+    selectedAnswers,
+  ];
+}

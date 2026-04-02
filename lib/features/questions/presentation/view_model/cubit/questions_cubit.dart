@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:exam_app/core/routes/app_router.dart';
-import 'package:exam_app/core/routes/routes.dart';
 import 'package:exam_app/core/shared/widgets/custom_button.dart';
 import 'package:exam_app/core/theme/app_colors.dart';
 import 'package:exam_app/core/theme/app_text_style.dart';
@@ -12,7 +11,6 @@ import 'package:exam_app/features/questions/domain/entities/question_entity.dart
 import 'package:exam_app/features/questions/domain/use_cases/get_questions_by_exam_id_use_case.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
 import 'package:lottie/lottie.dart';
 
@@ -77,7 +75,8 @@ class QuestionsCubit extends Cubit<QuestionsStates> {
                     height: 35,
                     title: "View score",
                     onTap: () {
-                      context.push(Routes.question);
+                      Navigator.pop(context); // Close the dialog
+                      submitExam();
                     },
                   ),
                 ],
@@ -117,6 +116,61 @@ class QuestionsCubit extends Cubit<QuestionsStates> {
       updatedAnswers[questionIndex] = currentSelected;
       emit(currentState.copyWith(selectedAnswers: updatedAnswers));
     }
+  }
+
+  void submitExam() {
+    final currentState = state;
+    if (currentState is QuestionsLoaded) {
+      int correctCount = 0;
+      int incorrectCount = 0;
+
+      for (int i = 0; i < currentState.questions.length; i++) {
+        final question = currentState.questions[i];
+        final selected = currentState.selectedAnswers[i] ?? [];
+        final correct = question.correct;
+
+        bool isCorrect = false;
+        if (question.type == QuestionType.multi) {
+          // Assuming comma-separated or similar for multiple correct if it's a string,
+          // but based on mock it's just a single key.
+          // So let's check if selected contains the correct key and matches perfectly.
+          // For now, let's treat 'correct' as a comma-separated list of keys for 'multi' type.
+          final correctKeys = correct?.split(',') ?? [];
+          if (selected.length == correctKeys.length &&
+              selected.every((key) => correctKeys.contains(key))) {
+            isCorrect = true;
+          }
+        } else {
+          if (selected.isNotEmpty && selected.first == correct) {
+            isCorrect = true;
+          }
+        }
+
+        if (isCorrect) {
+          correctCount++;
+        } else {
+          incorrectCount++;
+        }
+      }
+
+      final scorePercentage =
+          (correctCount / currentState.questions.length) * 100;
+
+      emit(
+        QuestionsResult(
+          correctCount: correctCount,
+          incorrectCount: incorrectCount,
+          scorePercentage: scorePercentage,
+          questions: currentState.questions,
+          selectedAnswers: currentState.selectedAnswers,
+        ),
+      );
+      _timer?.cancel();
+    }
+  }
+
+  void resetExam() {
+    getQuestions(""); // Or some specific ID if needed.
   }
 
   void nextQuestion() {

@@ -8,7 +8,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
 class ExamAppbar extends StatelessWidget implements PreferredSizeWidget {
-  const ExamAppbar({super.key});
+  final String? title;
+  const ExamAppbar({super.key, this.title});
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
@@ -20,7 +21,10 @@ class ExamAppbar extends StatelessWidget implements PreferredSizeWidget {
       surfaceTintColor: Colors.white,
       elevation: 0,
 
-      title: Text('Exam', style: 18.bold.copyWith(color: AppColors.black)),
+      title: Text(
+        title ?? 'Exam',
+        style: 18.bold.copyWith(color: AppColors.black),
+      ),
       centerTitle: false,
       actions: [
         Padding(
