@@ -1,62 +1,52 @@
 part of 'questions_cubit.dart';
 
-sealed class QuestionsStates extends Equatable {
-  const QuestionsStates();
-
-  @override
-  List<Object?> get props => [];
-}
-
-class QuestionsInitial extends QuestionsStates {}
-
-class QuestionsLoading extends QuestionsStates {}
-
-class QuestionsLoaded extends QuestionsStates {
+class QuestionsStates extends Equatable {
+  final BaseState<List<QuestionEntity>>? getQuestionsState;
+  final BaseState<QuestionsResult>? submitExamState;
   final List<QuestionEntity> questions;
   final int currentIndex;
   final Map<int, List<String>> selectedAnswers;
   final int secondsRemaining;
 
-  const QuestionsLoaded({
-    required this.questions,
+  const QuestionsStates({
+    this.getQuestionsState = const BaseState.initial(),
+    this.submitExamState = const BaseState.initial(),
+    this.questions = const [],
     this.currentIndex = 0,
     this.selectedAnswers = const {},
-    this.secondsRemaining = 5,
+    this.secondsRemaining = 0,
   });
 
-  @override
-  List<Object?> get props => [
-    questions,
-    currentIndex,
-    selectedAnswers,
-    secondsRemaining,
-  ];
-
-  QuestionsLoaded copyWith({
+  QuestionsStates copyWith({
+    BaseState<List<QuestionEntity>>? getQuestionsState,
+    BaseState<QuestionsResult>? submitExamState,
     List<QuestionEntity>? questions,
     int? currentIndex,
     Map<int, List<String>>? selectedAnswers,
     int? secondsRemaining,
   }) {
-    return QuestionsLoaded(
+    return QuestionsStates(
+      getQuestionsState: getQuestionsState ?? this.getQuestionsState,
+      submitExamState: submitExamState ?? this.submitExamState,
       questions: questions ?? this.questions,
       currentIndex: currentIndex ?? this.currentIndex,
       selectedAnswers: selectedAnswers ?? this.selectedAnswers,
       secondsRemaining: secondsRemaining ?? this.secondsRemaining,
     );
   }
-}
-
-class QuestionsError extends QuestionsStates {
-  final String message;
-
-  const QuestionsError(this.message);
 
   @override
-  List<Object?> get props => [message];
+  List<Object?> get props => [
+    getQuestionsState,
+    submitExamState,
+    questions,
+    currentIndex,
+    selectedAnswers,
+    secondsRemaining,
+  ];
 }
 
-class QuestionsResult extends QuestionsStates {
+class QuestionsResult extends Equatable {
   final int correctCount;
   final int incorrectCount;
   final double scorePercentage;

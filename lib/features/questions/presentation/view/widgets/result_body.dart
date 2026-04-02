@@ -1,3 +1,4 @@
+import 'package:exam_app/config/base_state/base_state.dart';
 import 'package:exam_app/core/shared/widgets/custom_button.dart';
 import 'package:exam_app/core/theme/app_colors.dart';
 import 'package:exam_app/core/theme/app_text_style.dart';
@@ -21,7 +22,6 @@ class ResultView extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: AppSize.s16),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-
           children: [
             SizedBox(height: AppSize.s24),
             Text(
@@ -63,12 +63,19 @@ class ResultView extends StatelessWidget {
               },
             ),
             SizedBox(height: AppSize.s16),
-            CustomButton(
-              title: 'Start again',
-              onTap: () => cubit.resetExam(),
-              isFilled: false,
-              borderColor: AppColors.primaryLight,
-              titleStyle: 14.regular.copyWith(color: AppColors.primaryLight),
+            BlocBuilder<QuestionsCubit, QuestionsStates>(
+              builder: (context, state) {
+                return CustomButton(
+                  isLoading: state.submitExamState?.state == StateType.loading,
+                  title: 'Start again',
+                  onTap: () => cubit.resetExam(),
+                  isFilled: false,
+                  borderColor: AppColors.primaryLight,
+                  titleStyle: 14.regular.copyWith(
+                    color: AppColors.primaryLight,
+                  ),
+                );
+              },
             ),
           ],
         ),

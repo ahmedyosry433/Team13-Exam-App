@@ -1,11 +1,14 @@
+import 'package:exam_app/config/base_state/base_state.dart';
 import 'package:exam_app/core/theme/app_colors.dart';
 import 'package:exam_app/core/theme/app_text_style.dart';
+import 'package:exam_app/core/values/app_animations.dart';
 import 'package:exam_app/core/values/app_icons.dart';
 import 'package:exam_app/core/values/app_size.dart';
 import 'package:exam_app/features/questions/presentation/view_model/cubit/questions_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:lottie/lottie.dart';
 
 class ExamAppbar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
@@ -16,11 +19,11 @@ class ExamAppbar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<QuestionsCubit>();
     return AppBar(
       backgroundColor: Colors.white,
       surfaceTintColor: Colors.white,
       elevation: 0,
-
       title: Text(
         title ?? 'Exam',
         style: 18.bold.copyWith(color: AppColors.black),
@@ -31,19 +34,31 @@ class ExamAppbar extends StatelessWidget implements PreferredSizeWidget {
           padding: EdgeInsets.symmetric(horizontal: AppSize.s16),
           child: BlocBuilder<QuestionsCubit, QuestionsStates>(
             builder: (context, state) {
-              if (state is QuestionsLoaded) {
+              final isLoaded =
+                  state.getQuestionsState?.state == StateType.success;
+              final isResult =
+                  state.submitExamState?.state == StateType.success;
+
+              if (isLoaded && !isResult) {
                 final minutes = (state.secondsRemaining / 60).floor();
                 final seconds = state.secondsRemaining % 60;
-                return Row(
-                  children: [
-                    SvgPicture.asset(AppIcons.iconsClock),
-                    SizedBox(width: AppSize.s4),
-                    Text(
-                      '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}',
-                      style: 18.medium.copyWith(color: AppColors.green0C),
-                    ),
-                  ],
-                );
+                return state.secondsRemaining < 11 && state.secondsRemaining > 0
+                    ? Lottie.asset(AppAnimations.timerDownAnimation)
+                    : Row(
+                        children: [
+                          SvgPicture.asset(AppIcons.iconsClock),
+                          SizedBox(width: AppSize.s4),
+                          Text(
+                            '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}',
+                            style: 18.medium.copyWith(
+                              color:
+                                  state.secondsRemaining < cubit.totalTime / 2
+                                  ? AppColors.redCC
+                                  : AppColors.green0C,
+                            ),
+                          ),
+                        ],
+                      );
               }
               return const SizedBox();
             },

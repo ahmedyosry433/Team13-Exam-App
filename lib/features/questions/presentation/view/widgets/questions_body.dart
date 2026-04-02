@@ -1,3 +1,4 @@
+import 'package:exam_app/config/base_state/base_state.dart';
 import 'package:exam_app/core/shared/widgets/custom_button.dart';
 import 'package:exam_app/core/shared/widgets/custom_page_loading.dart';
 import 'package:exam_app/core/theme/app_colors.dart';
@@ -16,11 +17,13 @@ class QuestionsPageBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<QuestionsCubit, QuestionsStates>(
       builder: (context, state) {
-        if (state is QuestionsLoading) {
+        final getQuestions = state.getQuestionsState;
+        
+        if (getQuestions?.state == StateType.loading) {
           return const CustomPageLoading();
-        } else if (state is QuestionsError) {
-          return Center(child: Text(state.message));
-        } else if (state is QuestionsLoaded) {
+        } else if (getQuestions?.state == StateType.error) {
+          return Center(child: Text(getQuestions?.exception?.toString() ?? 'Error'));
+        } else if (getQuestions?.state == StateType.success) {
           final cubit = context.read<QuestionsCubit>();
           return SafeArea(
             bottom: true,
