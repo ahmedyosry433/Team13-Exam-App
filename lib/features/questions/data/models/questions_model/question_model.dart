@@ -14,7 +14,7 @@ class QuestionModel {
   @JsonKey(name: 'exam')
   final ExamModel? exam;
   @JsonKey(name: 'type')
-  final String? type;
+  final QuestionType? type;
   @JsonKey(name: 'question')
   final String? question;
   @JsonKey(name: 'correct')

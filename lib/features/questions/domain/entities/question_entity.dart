@@ -2,9 +2,11 @@ import 'package:equatable/equatable.dart';
 import 'answer_entity.dart';
 import 'exam_entity.dart';
 
+enum QuestionType { single, multi }
+
 class QuestionEntity extends Equatable {
   final List<AnswerEntity>? answers;
-  final String? type;
+  final QuestionType? type;
   final String? id;
   final String? question;
   final String? correct;
