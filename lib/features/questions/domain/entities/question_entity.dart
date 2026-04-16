@@ -1,8 +1,16 @@
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'answer_entity.dart';
 import 'exam_entity.dart';
 
-enum QuestionType { single, multi }
+enum QuestionType {
+  @JsonValue('single')
+  single,
+  @JsonValue('multi')
+  multi,
+  @JsonValue('single_choice')
+  singleChoice,
+}
 
 class QuestionEntity extends Equatable {
   final List<AnswerEntity>? answers;

@@ -17,22 +17,22 @@ class QuestionModel {
   final QuestionType? type;
   @JsonKey(name: 'question')
   final String? question;
-  @JsonKey(name: 'correct')
-  final String? correct;
-  @JsonKey(name: 'subject')
-  final String? subject;
-  @JsonKey(name: 'createdAt')
-  final DateTime? createdAt;
+  // @JsonKey(name: 'correct')
+  // final String? correct;
+  // @JsonKey(name: 'subject')
+  // final String? subject;
+  // @JsonKey(name: 'createdAt')
+  // final DateTime? createdAt;
 
   const QuestionModel({
     this.answers,
     this.type,
     this.id,
     this.question,
-    this.correct,
-    this.subject,
+    // this.correct,
+    // this.subject,
     this.exam,
-    this.createdAt,
+    // this.createdAt,
   });
 
   factory QuestionModel.fromJson(Map<String, dynamic> json) =>
@@ -46,10 +46,10 @@ class QuestionModel {
       answers: answers?.map((answer) => answer.toEntity()).toList(),
       type: type,
       question: question,
-      correct: correct,
-      subject: subject,
+      // correct: correct,
+      // subject: subject,
       exam: exam?.toEntity(),
-      createdAt: createdAt,
+      // createdAt: createdAt,
     );
   }
 }
