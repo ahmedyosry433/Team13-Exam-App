@@ -1,7 +1,7 @@
 class AppEndPoints {
   AppEndPoints._();
-  static const String baseUrl = 'https://ecommerce.routemisr.com/api/v1';
-  static const String getProductsEndpoint = '$baseUrl/products';
-  static const String getCategoriesEndpoint = '$baseUrl/categories';
-  static const String refreshToken = '$baseUrl/refresh-token';
+  static const String refreshToken = '/refresh-token';
+  static const String forgetPasswordEndpoint = '/auth/forgotPassword';
+  static const String verifyCodeEndpoint = '/auth/verifyResetCode';
+  static const String resetPasswordEndpoint = '/auth/resetPassword';
 }

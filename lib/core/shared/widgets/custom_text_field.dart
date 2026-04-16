@@ -155,7 +155,7 @@ class CustomTextFormField extends StatelessWidget {
               ? [FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))]
               : inputFormatters,
           cursorColor: AppColors.primaryLight,
-          style: textStyle ?? 16.regular,
+          style: textStyle ?? 16.regular.copyWith(color: AppColors.black),
           onFieldSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
             fillColor: !isReadOnly ? fillColor : AppColors.backgroundLight,
@@ -198,7 +198,12 @@ class CustomTextFormField extends StatelessWidget {
             errorMaxLines: errorMaxlines ?? 2,
             // adding error text
             errorText: errorText,
-            label: labelWidget ?? Text(labelText ?? "", style: 14.regular),
+            label:
+                labelWidget ??
+                Text(
+                  labelText ?? "",
+                  style: 14.regular.copyWith(color: AppColors.black),
+                ),
             floatingLabelBehavior:
                 floatingLabelBehavior ?? FloatingLabelBehavior.auto,
             errorBorder:
