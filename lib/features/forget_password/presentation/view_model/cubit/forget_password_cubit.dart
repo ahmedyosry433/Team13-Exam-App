@@ -6,7 +6,7 @@ import 'package:exam_app/features/forget_password/domain/use_cases/send_otp_use_
 import 'package:exam_app/features/forget_password/domain/use_cases/reset_password_use_case.dart';
 import 'package:exam_app/features/forget_password/domain/use_cases/verify_reset_code_use_case.dart';
 import 'package:exam_app/features/forget_password/presentation/view/widgets/opt_widget.dart';
-import 'package:exam_app/features/forget_password/presentation/view/widgets/email_widget.dart';
+import 'package:exam_app/features/forget_password/presentation/view/widgets/forget_password_email_widget.dart';
 import 'package:exam_app/features/forget_password/presentation/view/widgets/reset_password.dart';
 import 'package:exam_app/features/forget_password/presentation/view_model/cubit/forget_password_events.dart';
 import 'package:exam_app/features/forget_password/presentation/view_model/cubit/forget_password_states.dart';
@@ -37,7 +37,11 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordStates> {
   final GlobalKey<FormState> resetPasswordFormKey = GlobalKey<FormState>();
 
   // ! Page View
-  List<Widget> children = [EmailWidget(), OtpWidget(), ResetPassword()];
+  List<Widget> children = [
+    ForgetPasswordEmailWidget(),
+    OtpWidget(),
+    ResetPassword(),
+  ];
   int currentPage = 0;
   final PageController pageController = PageController(initialPage: 0);
 
@@ -329,17 +333,8 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordStates> {
 
   //!=========================== Close ===========================================
 
-  // ! Clear Controllers
-  void _clear() {
-    emailController.clear();
-    codeController.clear();
-    newPasswordController.clear();
-    confirmNewPasswordController.clear();
-  }
-
   @override
   Future<void> close() {
-    _clear();
     emailController.dispose();
     codeController.dispose();
     newPasswordController.dispose();

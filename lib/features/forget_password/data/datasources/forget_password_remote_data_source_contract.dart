@@ -3,7 +3,7 @@
 import 'package:exam_app/config/base_response/base_response.dart';
 import 'package:exam_app/core/classes/params.dart';
 
-abstract class ForgetPasswordRemoteDataSourceContract {
+abstract interface class ForgetPasswordRemoteDataSourceContract {
   Future<Result<void>> sendOtp(ForgetPasswordParams params);
   Future<Result<void>> verifyCode(ForgetPasswordParams params);
   Future<Result<void>> resetPassword(ForgetPasswordParams params);

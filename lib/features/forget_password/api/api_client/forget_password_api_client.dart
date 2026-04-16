@@ -8,7 +8,7 @@ part 'forget_password_api_client.g.dart';
 
 @injectable
 @RestApi()
-abstract class ForgetPasswordApiClient {
+abstract interface class ForgetPasswordApiClient {
   @factoryMethod
   factory ForgetPasswordApiClient(Dio dio) = _ForgetPasswordApiClient;
   @POST(AppEndPoints.forgetPasswordEndpoint)

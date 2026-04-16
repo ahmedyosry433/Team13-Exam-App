@@ -18,8 +18,8 @@ import '../../view_model/cubit/forget_password_cubit.dart';
 import '../../view_model/cubit/forget_password_events.dart';
 import '../../view_model/cubit/forget_password_states.dart';
 
-class EmailWidget extends StatelessWidget {
-  const EmailWidget({super.key});
+class ForgetPasswordEmailWidget extends StatelessWidget {
+  const ForgetPasswordEmailWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +64,12 @@ class EmailWidget extends StatelessWidget {
           ),
           SizedBox(height: 24),
           BlocConsumer<ForgetPasswordCubit, ForgetPasswordStates>(
+            listenWhen: (previous, current) =>
+                previous.sendCodeToEmailState != current.sendCodeToEmailState,
+            buildWhen: (previous, current) =>
+                previous.emailFormValidChangedState !=
+                    current.emailFormValidChangedState ||
+                previous.sendCodeToEmailState != current.sendCodeToEmailState,
             builder: (context, state) {
               return CustomButton(
                 isLoading:

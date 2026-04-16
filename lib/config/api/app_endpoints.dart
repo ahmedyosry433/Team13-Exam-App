@@ -1,8 +1,7 @@
 class AppEndPoints {
   AppEndPoints._();
-  static const String baseUrl = 'https://exam.elevateegy.com/api/v1';
-  static const String refreshToken = '$baseUrl/refresh-token';
-  static const String forgetPasswordEndpoint = '$baseUrl/auth/forgotPassword';
-  static const String verifyCodeEndpoint = '$baseUrl/auth/verifyResetCode';
-  static const String resetPasswordEndpoint = '$baseUrl/auth/resetPassword';
+  static const String refreshToken = '/refresh-token';
+  static const String forgetPasswordEndpoint = '/auth/forgotPassword';
+  static const String verifyCodeEndpoint = '/auth/verifyResetCode';
+  static const String resetPasswordEndpoint = '/auth/resetPassword';
 }

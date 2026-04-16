@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:exam_app/config/api/app_endpoints.dart';
+import 'package:exam_app/config/app_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
@@ -24,7 +24,7 @@ abstract class CoreInjectableModule {
   Dio dio() {
     final dio = Dio(
       BaseOptions(
-        baseUrl: AppEndPoints.baseUrl,
+        baseUrl: AppConfig.baseUrl,
         sendTimeout: Duration(seconds: 45),
         connectTimeout: Duration(seconds: 45),
       ),

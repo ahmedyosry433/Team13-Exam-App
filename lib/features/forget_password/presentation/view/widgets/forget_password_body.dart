@@ -12,6 +12,10 @@ class ForgetPasswordBody extends StatelessWidget {
     final ForgetPasswordCubit forgetPasswordCubit = context
         .read<ForgetPasswordCubit>();
     return BlocBuilder<ForgetPasswordCubit, ForgetPasswordStates>(
+      buildWhen: (previous, current) =>
+          previous.sendCodeToEmailState != current.sendCodeToEmailState ||
+          previous.verifyCodeState != current.verifyCodeState ||
+          previous.resetPasswordState != current.resetPasswordState,
       builder: (context, state) {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),

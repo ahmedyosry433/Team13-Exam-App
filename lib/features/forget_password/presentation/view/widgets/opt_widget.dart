@@ -57,18 +57,14 @@ class OtpWidget extends StatelessWidget {
               if (state.verifyCodeState!.state == StateType.loading) {
                 showDialogLoading(context);
               } else if (state.verifyCodeState!.state == StateType.success) {
-                if (context.canPop()) {
-                  context.pop();
-                }
+                Navigator.pop(context);
                 CustomToast(
                   context: context,
                   header: LocaleKeys.forget_password_code_correct.tr(),
                   type: ToastificationType.success,
                 ).showToast();
               } else if (state.verifyCodeState!.state == StateType.error) {
-                if (context.canPop()) {
-                  context.pop();
-                }
+                Navigator.pop(context);
                 bool hasNetworkError = handleNetwork(
                   state.verifyCodeState!.exception!,
                 );
