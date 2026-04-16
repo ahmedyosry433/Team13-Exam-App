@@ -6,7 +6,6 @@ import 'package:exam_app/core/theme/app_text_style.dart';
 import 'package:exam_app/core/validations/validations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:toastification/toastification.dart';
 
 import '../../../../../core/languages/locale_keys.g.dart';
@@ -19,15 +18,29 @@ import '../../view_model/cubit/forget_password_cubit.dart';
 import '../../view_model/cubit/forget_password_events.dart';
 import '../../view_model/cubit/forget_password_states.dart';
 
-class OtpWidget extends StatelessWidget {
+class OtpWidget extends StatefulWidget {
   const OtpWidget({super.key});
+
+  @override
+  State<OtpWidget> createState() => _OtpWidgetState();
+}
+
+class _OtpWidgetState extends State<OtpWidget> {
+  final TextEditingController _codeController = TextEditingController();
+  final GlobalKey<FormState> _codeFormKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    _codeController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final ForgetPasswordCubit forgetPasswordCubit = context
         .read<ForgetPasswordCubit>();
     return Form(
-      key: forgetPasswordCubit.codeFormKey,
+      key: _codeFormKey,
       child: Column(
         children: [
           Padding(
@@ -39,7 +52,7 @@ class OtpWidget extends StatelessWidget {
                   LocaleKeys.forget_password_email_verification.tr(),
                   style: 18.medium.copyWith(color: AppColors.onBackgroundLight),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
                   textAlign: TextAlign.center,
                   LocaleKeys.forget_password_email_verification_message.tr(),
@@ -48,7 +61,7 @@ class OtpWidget extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 32),
+          const SizedBox(height: 32),
           BlocListener<ForgetPasswordCubit, ForgetPasswordStates>(
             listenWhen: (previous, current) =>
                 previous.verifyCodeState?.state !=
@@ -63,6 +76,7 @@ class OtpWidget extends StatelessWidget {
                   header: LocaleKeys.forget_password_code_correct.tr(),
                   type: ToastificationType.success,
                 ).showToast();
+                forgetPasswordCubit.doIndented(NextPageEvent());
               } else if (state.verifyCodeState!.state == StateType.error) {
                 Navigator.pop(context);
                 bool hasNetworkError = handleNetwork(
@@ -79,23 +93,35 @@ class OtpWidget extends StatelessWidget {
             },
             child: CustomPinInput(
               length: 6,
-              controller: forgetPasswordCubit.codeController,
+              controller: _codeController,
               validator: (value) => Validations.validatePin(value, 6),
               onChange: (_) {
-                forgetPasswordCubit.doIndented(CodeFormValidChangedEvent());
-                if (forgetPasswordCubit.codeFormKey.currentState!.validate()) {
-                  forgetPasswordCubit.doIndented(VerifyCodeEvent());
+                forgetPasswordCubit.doIndented(
+                  CodeFormValidChangedEvent(
+                    _codeFormKey.currentState?.validate() ?? false,
+                  ),
+                );
+                if (_codeFormKey.currentState!.validate()) {
+                  forgetPasswordCubit.doIndented(
+                    VerifyCodeEvent(_codeController.text.trim()),
+                  );
                 }
               },
               onSubmitted: (_) {
-                forgetPasswordCubit.doIndented(CodeFormValidChangedEvent());
-                if (forgetPasswordCubit.codeFormKey.currentState!.validate()) {
-                  forgetPasswordCubit.doIndented(VerifyCodeEvent());
+                forgetPasswordCubit.doIndented(
+                  CodeFormValidChangedEvent(
+                    _codeFormKey.currentState?.validate() ?? false,
+                  ),
+                );
+                if (_codeFormKey.currentState!.validate()) {
+                  forgetPasswordCubit.doIndented(
+                    VerifyCodeEvent(_codeController.text.trim()),
+                  );
                 }
               },
             ),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           BlocListener<ForgetPasswordCubit, ForgetPasswordStates>(
             listener: (context, state) {
               if (state.resendCodeToEmailState!.state == StateType.success) {
@@ -120,7 +146,11 @@ class OtpWidget extends StatelessWidget {
             },
             child: ResendTimer(
               onResend: () {
-                forgetPasswordCubit.doIndented(ResendCodeToEmailEvent());
+                forgetPasswordCubit.doIndented(
+                  ResendCodeToEmailEvent(
+                    context.read<ForgetPasswordCubit>().state.storedEmail!,
+                  ),
+                );
               },
             ),
           ),

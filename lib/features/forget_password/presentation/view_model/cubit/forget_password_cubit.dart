@@ -5,12 +5,8 @@ import 'package:exam_app/core/languages/locale_keys.g.dart';
 import 'package:exam_app/features/forget_password/domain/use_cases/send_otp_use_case.dart';
 import 'package:exam_app/features/forget_password/domain/use_cases/reset_password_use_case.dart';
 import 'package:exam_app/features/forget_password/domain/use_cases/verify_reset_code_use_case.dart';
-import 'package:exam_app/features/forget_password/presentation/view/widgets/opt_widget.dart';
-import 'package:exam_app/features/forget_password/presentation/view/widgets/forget_password_email_widget.dart';
-import 'package:exam_app/features/forget_password/presentation/view/widgets/reset_password.dart';
 import 'package:exam_app/features/forget_password/presentation/view_model/cubit/forget_password_events.dart';
 import 'package:exam_app/features/forget_password/presentation/view_model/cubit/forget_password_states.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
@@ -21,57 +17,37 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordStates> {
     this._verifyResetCodeUseCase,
     this._resetPasswordUseCase,
   ) : super(const ForgetPasswordStates());
+
   final SendOtpUseCase _sendOtpUseCase;
   final VerifyResetCodeUseCase _verifyResetCodeUseCase;
   final ResetPasswordUseCase _resetPasswordUseCase;
-  // ! Controllers
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController codeController = TextEditingController();
-  final TextEditingController newPasswordController = TextEditingController();
-  final TextEditingController confirmNewPasswordController =
-      TextEditingController();
-
-  // ! Form Keys
-  final GlobalKey<FormState> emailFormKey = GlobalKey<FormState>();
-  final GlobalKey<FormState> codeFormKey = GlobalKey<FormState>();
-  final GlobalKey<FormState> resetPasswordFormKey = GlobalKey<FormState>();
-
-  // ! Page View
-  List<Widget> children = [
-    ForgetPasswordEmailWidget(),
-    OtpWidget(),
-    ResetPassword(),
-  ];
-  int currentPage = 0;
-  final PageController pageController = PageController(initialPage: 0);
 
   //!=========================== Event =========================================
   void doIndented(ForgetPasswordEvents event) {
     switch (event) {
       case EmailFormValidChangedEvent():
-        _emailFormValidChanged();
+        _emailFormValidChanged(event.isValid);
       case CodeFormValidChangedEvent():
-        _codeFormValidChanged();
+        _codeFormValidChanged(event.isValid);
       case ResetFormValidChangedEvent():
-        _resetPasswordFormValidChanged();
+        _resetPasswordFormValidChanged(event.isValid);
       case NextPageEvent():
         _nextPage();
       case ObscureTextChangedEvent():
         _obscureTextChanged(event.fieldKey);
       case SendCodeToEmailEvent():
-        _sendOtp();
+        _sendOtp(event.email);
       case ResendCodeToEmailEvent():
-        resendCode();
+        resendCode(event.email);
       case VerifyCodeEvent():
-        _verifyResetCode();
+        _verifyResetCode(event.code);
       case ResetPasswordEvent():
-        _resetPassword();
+        _resetPassword(email: event.email, password: event.password);
     }
   }
 
   // ! Form Reset Valid Changed
-  void _resetPasswordFormValidChanged() {
-    bool isValid = resetPasswordFormKey.currentState?.validate() ?? false;
+  void _resetPasswordFormValidChanged(bool isValid) {
     if (!isValid) {
       emit(
         state.copyWith(
@@ -91,8 +67,7 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordStates> {
   }
 
   // ! Form email Valid Changed
-  void _emailFormValidChanged() {
-    bool isValid = emailFormKey.currentState?.validate() ?? false;
+  void _emailFormValidChanged(bool isValid) {
     if (!isValid) {
       emit(
         state.copyWith(
@@ -110,8 +85,7 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordStates> {
   }
 
   // ! Form Code Valid Changed
-  void _codeFormValidChanged() {
-    bool isValid = codeFormKey.currentState?.validate() ?? false;
+  void _codeFormValidChanged(bool isValid) {
     if (!isValid) {
       emit(
         state.copyWith(
@@ -134,7 +108,7 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordStates> {
 
   //!=========================== Methods =========================================
   // ! sendOtp
-  Future<void> _sendOtp() async {
+  Future<void> _sendOtp(String email) async {
     emit(
       state.copyWith(
         sendCodeToEmailState: const SendCodeToEmailState(
@@ -142,15 +116,13 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordStates> {
         ),
       ),
     );
-    final result = await _sendOtpUseCase(
-      ForgetPasswordParams(email: emailController.text.trim()),
-    );
+    final result = await _sendOtpUseCase(ForgetPasswordParams(email: email));
 
     result.when(
       success: (value) {
-        _nextPage();
         emit(
           state.copyWith(
+            storedEmail: email,
             sendCodeToEmailState: const SendCodeToEmailState(
               state: StateType.success,
             ),
@@ -171,9 +143,7 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordStates> {
   }
 
   // ! verifyResetCode
-  Future<void> _verifyResetCode() async {
-    final isValid = codeFormKey.currentState?.validate() ?? false;
-    if (!isValid) return;
+  Future<void> _verifyResetCode(String code) async {
     emit(
       state.copyWith(
         resendCodeToEmailState: const ResendCodeToEmailState(
@@ -188,12 +158,11 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordStates> {
     );
 
     final result = await _verifyResetCodeUseCase(
-      ForgetPasswordParams(code: codeController.text.trim()),
+      ForgetPasswordParams(code: code),
     );
 
     result.when(
       success: (value) {
-        _nextPage();
         emit(
           state.copyWith(
             verifyCodeState: const VerifyCodeState(state: StateType.success),
@@ -214,17 +183,17 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordStates> {
   }
 
   // ! resetPassword
-  Future<void> _resetPassword() async {
+  Future<void> _resetPassword({
+    required String email,
+    required String password,
+  }) async {
     emit(
       state.copyWith(
         resetPasswordState: const ResetPasswordState(state: StateType.loading),
       ),
     );
     final result = await _resetPasswordUseCase(
-      ForgetPasswordParams(
-        email: emailController.text.trim(),
-        newPassword: newPasswordController.text.trim(),
-      ),
+      ForgetPasswordParams(email: email, newPassword: password),
     );
 
     result.when(
@@ -251,7 +220,7 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordStates> {
   }
 
   //! resend code use case
-  Future<void> resendCode() async {
+  Future<void> resendCode(String email) async {
     emit(
       state.copyWith(
         verifyCodeState: const VerifyCodeState(state: StateType.initial),
@@ -264,9 +233,7 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordStates> {
         ),
       ),
     );
-    final result = await _sendOtpUseCase(
-      ForgetPasswordParams(email: emailController.text.trim()),
-    );
+    final result = await _sendOtpUseCase(ForgetPasswordParams(email: email));
 
     result.when(
       success: (value) {
@@ -318,29 +285,13 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordStates> {
 
   // ! Next Page
   void _nextPage() {
-    if (currentPage < children.length - 1) {
-      currentPage++;
-      pageController.animateToPage(
-        currentPage,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeInOut,
-      );
-      emit(
-        state.copyWith(nextPageState: NextPageState(currentPage: currentPage)),
-      );
-    }
-  }
-
-  //!=========================== Close ===========================================
-
-  @override
-  Future<void> close() {
-    emailController.dispose();
-    codeController.dispose();
-    newPasswordController.dispose();
-    confirmNewPasswordController.dispose();
-    pageController.dispose();
-    return super.close();
+    emit(
+      state.copyWith(
+        nextPageState: NextPageState(
+          currentPage: state.nextPageState!.currentPage + 1,
+        ),
+      ),
+    );
   }
 
   @override

@@ -18,15 +18,30 @@ import '../../view_model/cubit/forget_password_cubit.dart';
 import '../../view_model/cubit/forget_password_events.dart';
 import '../../view_model/cubit/forget_password_states.dart';
 
-class ForgetPasswordEmailWidget extends StatelessWidget {
+class ForgetPasswordEmailWidget extends StatefulWidget {
   const ForgetPasswordEmailWidget({super.key});
 
   @override
+  State<ForgetPasswordEmailWidget> createState() =>
+      _ForgetPasswordEmailWidgetState();
+}
+
+class _ForgetPasswordEmailWidgetState extends State<ForgetPasswordEmailWidget> {
+  final TextEditingController _emailController = TextEditingController();
+  final GlobalKey<FormState> _emailFormKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final ForgetPasswordCubit forgetPasswordCubit = context
-        .read<ForgetPasswordCubit>();
+    final ForgetPasswordCubit forgetPasswordCubit =
+        context.read<ForgetPasswordCubit>();
     return Form(
-      key: forgetPasswordCubit.emailFormKey,
+      key: _emailFormKey,
       child: Column(
         children: [
           Padding(
@@ -38,7 +53,7 @@ class ForgetPasswordEmailWidget extends StatelessWidget {
                   LocaleKeys.forget_password_title.tr(),
                   style: 18.medium.copyWith(color: AppColors.onBackgroundLight),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
                   textAlign: TextAlign.center,
                   LocaleKeys.forget_password_message.tr(),
@@ -47,22 +62,30 @@ class ForgetPasswordEmailWidget extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 32),
+          const SizedBox(height: 32),
           CustomTextFormField(
-            controller: forgetPasswordCubit.emailController,
+            controller: _emailController,
             labelText: LocaleKeys.forget_password_email_label.tr(),
             hintText: LocaleKeys.forget_password_email_hint.tr(),
             textInputType: TextInputType.emailAddress,
             validator: Validations.validateEmail,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             onChanged: (_) {
-              forgetPasswordCubit.doIndented(EmailFormValidChangedEvent());
+              forgetPasswordCubit.doIndented(
+                EmailFormValidChangedEvent(
+                  _emailFormKey.currentState?.validate() ?? false,
+                ),
+              );
             },
             onFieldSubmitted: (_) {
-              forgetPasswordCubit.doIndented(EmailFormValidChangedEvent());
+              forgetPasswordCubit.doIndented(
+                EmailFormValidChangedEvent(
+                  _emailFormKey.currentState?.validate() ?? false,
+                ),
+              );
             },
           ),
-          SizedBox(height: 24),
+          const SizedBox(height: 24),
           BlocConsumer<ForgetPasswordCubit, ForgetPasswordStates>(
             listenWhen: (previous, current) =>
                 previous.sendCodeToEmailState != current.sendCodeToEmailState,
@@ -77,7 +100,9 @@ class ForgetPasswordEmailWidget extends StatelessWidget {
                 title: LocaleKeys.forget_password_continue.tr(),
                 onTap: state.emailFormValidChangedState!.isValid
                     ? () {
-                        forgetPasswordCubit.doIndented(SendCodeToEmailEvent());
+                        forgetPasswordCubit.doIndented(
+                          SendCodeToEmailEvent(_emailController.text.trim()),
+                        );
                       }
                     : null,
               );
@@ -89,6 +114,7 @@ class ForgetPasswordEmailWidget extends StatelessWidget {
                   header: LocaleKeys.forget_password_email_sent_message.tr(),
                   type: ToastificationType.success,
                 ).showToast();
+                forgetPasswordCubit.doIndented(NextPageEvent());
               } else if (state.sendCodeToEmailState!.state == StateType.error) {
                 bool hasNetworkError = handleNetwork(
                   state.sendCodeToEmailState!.exception!,

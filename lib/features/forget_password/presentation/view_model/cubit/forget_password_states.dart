@@ -13,6 +13,7 @@ class ForgetPasswordStates extends Equatable {
   final VerifyCodeState? verifyCodeState;
   final ResetPasswordState? resetPasswordState;
   final NextPageState? nextPageState;
+  final String? storedEmail;
 
   const ForgetPasswordStates({
     this.obscureNewPasswordTextChangedState = const ObscureTextChangedState(
@@ -25,6 +26,7 @@ class ForgetPasswordStates extends Equatable {
     this.obscureConfirmNewPasswordTextChangedState =
         const ObscureTextChangedState(isObscure: true),
     this.nextPageState = const NextPageState(currentPage: 0),
+    this.storedEmail = '',
     this.emailFormValidChangedState = const FormValidChangedState(
       isValid: false,
     ),
@@ -47,6 +49,7 @@ class ForgetPasswordStates extends Equatable {
     FormValidChangedState? emailFormValidChangedState,
     FormValidChangedState? codeFormValidChangedState,
     FormValidChangedState? resetPasswordFormValidChangedState,
+    String? storedEmail,
   }) {
     return ForgetPasswordStates(
       emailFormValidChangedState:
@@ -68,6 +71,7 @@ class ForgetPasswordStates extends Equatable {
       resendCodeToEmailState:
           resendCodeToEmailState ?? this.resendCodeToEmailState,
       nextPageState: nextPageState ?? this.nextPageState,
+      storedEmail: storedEmail ?? this.storedEmail,
     );
   }
 
@@ -83,6 +87,7 @@ class ForgetPasswordStates extends Equatable {
     resetPasswordState,
     resendCodeToEmailState,
     nextPageState,
+    storedEmail,
   ];
 }
 

@@ -17,15 +17,32 @@ import '../../../../../core/theme/app_colors.dart';
 import '../../view_model/cubit/forget_password_cubit.dart';
 import '../../view_model/cubit/forget_password_events.dart';
 
-class ResetPassword extends StatelessWidget {
+class ResetPassword extends StatefulWidget {
   const ResetPassword({super.key});
 
   @override
+  State<ResetPassword> createState() => _ResetPasswordState();
+}
+
+class _ResetPasswordState extends State<ResetPassword> {
+  final TextEditingController _newPasswordController = TextEditingController();
+  final TextEditingController _confirmNewPasswordController =
+      TextEditingController();
+  final GlobalKey<FormState> _resetPasswordFormKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    _newPasswordController.dispose();
+    _confirmNewPasswordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final ForgetPasswordCubit forgetPasswordCubit = context
-        .read<ForgetPasswordCubit>();
+    final ForgetPasswordCubit forgetPasswordCubit =
+        context.read<ForgetPasswordCubit>();
     return Form(
-      key: forgetPasswordCubit.resetPasswordFormKey,
+      key: _resetPasswordFormKey,
       child: Column(
         children: [
           Padding(
@@ -37,7 +54,7 @@ class ResetPassword extends StatelessWidget {
                   LocaleKeys.forget_password_reset_password.tr(),
                   style: 18.medium.copyWith(color: AppColors.onBackgroundLight),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
                   textAlign: TextAlign.center,
                   LocaleKeys.forget_password_password_requirements.tr(),
@@ -46,11 +63,11 @@ class ResetPassword extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 32),
+          const SizedBox(height: 32),
           BlocBuilder<ForgetPasswordCubit, ForgetPasswordStates>(
             builder: (context, state) {
               return CustomTextFormField(
-                controller: forgetPasswordCubit.newPasswordController,
+                controller: _newPasswordController,
                 labelText: LocaleKeys.forget_password_new_password.tr(),
                 hintText: LocaleKeys.forget_password_enter_your_password.tr(),
                 textInputType: TextInputType.visiblePassword,
@@ -74,19 +91,27 @@ class ResetPassword extends StatelessWidget {
                   ),
                 ),
                 onChanged: (_) {
-                  forgetPasswordCubit.doIndented(ResetFormValidChangedEvent());
+                  forgetPasswordCubit.doIndented(
+                    ResetFormValidChangedEvent(
+                      _resetPasswordFormKey.currentState?.validate() ?? false,
+                    ),
+                  );
                 },
                 onFieldSubmitted: (_) {
-                  forgetPasswordCubit.doIndented(CodeFormValidChangedEvent());
+                  forgetPasswordCubit.doIndented(
+                    ResetFormValidChangedEvent(
+                      _resetPasswordFormKey.currentState?.validate() ?? false,
+                    ),
+                  );
                 },
               );
             },
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           BlocBuilder<ForgetPasswordCubit, ForgetPasswordStates>(
             builder: (context, state) {
               return CustomTextFormField(
-                controller: forgetPasswordCubit.confirmNewPasswordController,
+                controller: _confirmNewPasswordController,
                 labelText: LocaleKeys.forget_password_confirm_password.tr(),
                 hintText: LocaleKeys.forget_password_confirm_password.tr(),
                 textInputType: TextInputType.visiblePassword,
@@ -98,7 +123,7 @@ class ResetPassword extends StatelessWidget {
                 maxLine: 1,
                 validator: (value) => Validations.validatePasswordVerification(
                   value!,
-                  forgetPasswordCubit.newPasswordController.text,
+                  _newPasswordController.text,
                 ),
                 suffixWidget: IconButton(
                   onPressed: () {
@@ -119,15 +144,23 @@ class ResetPassword extends StatelessWidget {
                   ),
                 ),
                 onChanged: (_) {
-                  forgetPasswordCubit.doIndented(ResetFormValidChangedEvent());
+                  forgetPasswordCubit.doIndented(
+                    ResetFormValidChangedEvent(
+                      _resetPasswordFormKey.currentState?.validate() ?? false,
+                    ),
+                  );
                 },
                 onFieldSubmitted: (_) {
-                  forgetPasswordCubit.doIndented(ResetFormValidChangedEvent());
+                  forgetPasswordCubit.doIndented(
+                    ResetFormValidChangedEvent(
+                      _resetPasswordFormKey.currentState?.validate() ?? false,
+                    ),
+                  );
                 },
               );
             },
           ),
-          SizedBox(height: 32),
+          const SizedBox(height: 32),
           BlocConsumer<ForgetPasswordCubit, ForgetPasswordStates>(
             builder: (context, state) {
               return CustomButton(
@@ -135,7 +168,12 @@ class ResetPassword extends StatelessWidget {
                 title: LocaleKeys.forget_password_continue.tr(),
                 onTap: state.resetPasswordFormValidChangedState!.isValid
                     ? () {
-                        forgetPasswordCubit.doIndented(ResetPasswordEvent());
+                        forgetPasswordCubit.doIndented(
+                          ResetPasswordEvent(
+                            email: state.storedEmail!,
+                            password: _newPasswordController.text.trim(),
+                          ),
+                        );
                       }
                     : null,
               );
