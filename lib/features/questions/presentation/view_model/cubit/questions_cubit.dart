@@ -8,7 +8,6 @@ import 'package:exam_app/core/shared/widgets/custom_button.dart';
 import 'package:exam_app/core/theme/app_colors.dart';
 import 'package:exam_app/core/theme/app_text_style.dart';
 import 'package:exam_app/core/values/app_animations.dart';
-import 'package:exam_app/features/questions/domain/entities/answer_entity.dart';
 import 'package:exam_app/features/questions/domain/entities/question_entity.dart';
 import 'package:exam_app/features/questions/domain/use_cases/get_questions_by_exam_id_use_case.dart';
 import 'package:flutter/material.dart';
@@ -33,17 +32,25 @@ class QuestionsCubit extends Cubit<QuestionsStates> {
 
   Future<void> getQuestions(String examId) async {
     emit(state.copyWith(getQuestionsState: const BaseState.loading()));
-    await Future.delayed(const Duration(seconds: 1));
-    final mockQuestions = _getMockQuestions();
-    emit(
-      state.copyWith(
-        getQuestionsState: BaseState.success(mockQuestions),
-        questions: mockQuestions,
-        secondsRemaining: totalTime,
-        selectedAnswers: {},
-        currentIndex: 0,
-        submitExamState: const BaseState.initial(),
-      ),
+    final result = await _getQuestionsByExamIdUseCase(
+      "69d980117c82914570305dd5",
+    );
+    result.when(
+      success: (questions) {
+        emit(
+          state.copyWith(
+            getQuestionsState: BaseState.success(questions),
+            questions: questions,
+            secondsRemaining: totalTime,
+            selectedAnswers: {},
+            currentIndex: 0,
+            submitExamState: const BaseState.initial(),
+          ),
+        );
+      },
+      error: (exception) {
+        emit(state.copyWith(getQuestionsState: BaseState.error(exception)));
+      },
     );
     _startTimer();
   }
@@ -203,24 +210,5 @@ class QuestionsCubit extends Cubit<QuestionsStates> {
     _timer?.cancel();
     pageController.dispose();
     return super.close();
-  }
-
-  List<QuestionEntity> _getMockQuestions() {
-    return List.generate(
-      10,
-      (index) => QuestionEntity(
-        id: '$index',
-        question:
-            'Select the correctly punctuated sentence for question ${index + 1}.',
-        answers: const [
-          AnswerEntity(answerKey: 'A1', answer: 'Its going to rain today.'),
-          AnswerEntity(answerKey: 'A2', answer: 'It’s going to rain today.'),
-          AnswerEntity(answerKey: 'A3', answer: 'Its going to rain today.'),
-          AnswerEntity(answerKey: 'A4', answer: 'Its going to rain today.'),
-        ],
-        correct: 'A2',
-        type: index % 2 == 0 ? QuestionType.multi : QuestionType.single,
-      ),
-    );
   }
 }
