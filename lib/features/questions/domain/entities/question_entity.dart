@@ -4,8 +4,6 @@ import 'answer_entity.dart';
 import 'exam_entity.dart';
 
 enum QuestionType {
-  @JsonValue('single')
-  single,
   @JsonValue('multi')
   multi,
   @JsonValue('single_choice')

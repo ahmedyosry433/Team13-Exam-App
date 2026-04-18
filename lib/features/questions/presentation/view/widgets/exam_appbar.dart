@@ -1,4 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:exam_app/config/base_state/base_state.dart';
+import 'package:exam_app/core/languages/locale_keys.g.dart';
 import 'package:exam_app/core/theme/app_colors.dart';
 import 'package:exam_app/core/theme/app_text_style.dart';
 import 'package:exam_app/core/values/app_animations.dart';
@@ -19,13 +21,12 @@ class ExamAppbar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<QuestionsCubit>();
     return AppBar(
       backgroundColor: Colors.white,
       surfaceTintColor: Colors.white,
       elevation: 0,
       title: Text(
-        title ?? 'Exam',
+        title ?? LocaleKeys.global_exam.tr(),
         style: 18.bold.copyWith(color: AppColors.black),
       ),
       centerTitle: false,
@@ -52,7 +53,10 @@ class ExamAppbar extends StatelessWidget implements PreferredSizeWidget {
                             '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}',
                             style: 18.medium.copyWith(
                               color:
-                                  state.secondsRemaining < cubit.totalTime / 2
+                                  state.secondsRemaining <
+                                      (state.questions.first.exam?.duration ??
+                                              0) /
+                                          2
                                   ? AppColors.redCC
                                   : AppColors.green0C,
                             ),

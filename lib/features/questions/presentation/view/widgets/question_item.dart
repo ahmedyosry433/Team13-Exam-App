@@ -35,9 +35,10 @@ class QuestionItem extends StatelessWidget {
               itemCount: question.answers?.length ?? 0,
               itemBuilder: (context, index) {
                 final answer = question.answers![index];
+
                 return AnswerItem(
                   answer: answer,
-                  type: question.type ?? QuestionType.single,
+                  type: question.type ?? QuestionType.singleChoice,
                   isSelected: selectedAnswerKeys.contains(answer.answerKey),
                   onTap: () => onAnswerSelected(answer.answerKey!),
                 );

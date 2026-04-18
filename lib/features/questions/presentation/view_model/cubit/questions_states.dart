@@ -7,10 +7,12 @@ class QuestionsStates extends Equatable {
   final int currentIndex;
   final Map<int, List<String>> selectedAnswers;
   final int secondsRemaining;
+  final BaseState<void>? updatePageIndex;
 
   const QuestionsStates({
     this.getQuestionsState = const BaseState.initial(),
     this.submitExamState = const BaseState.initial(),
+    this.updatePageIndex = const BaseState.initial(),
     this.questions = const [],
     this.currentIndex = 0,
     this.selectedAnswers = const {},
@@ -24,6 +26,7 @@ class QuestionsStates extends Equatable {
     int? currentIndex,
     Map<int, List<String>>? selectedAnswers,
     int? secondsRemaining,
+    BaseState<void>? updatePageIndex,
   }) {
     return QuestionsStates(
       getQuestionsState: getQuestionsState ?? this.getQuestionsState,
@@ -32,6 +35,7 @@ class QuestionsStates extends Equatable {
       currentIndex: currentIndex ?? this.currentIndex,
       selectedAnswers: selectedAnswers ?? this.selectedAnswers,
       secondsRemaining: secondsRemaining ?? this.secondsRemaining,
+      updatePageIndex: updatePageIndex ?? this.updatePageIndex,
     );
   }
 
@@ -43,6 +47,7 @@ class QuestionsStates extends Equatable {
     currentIndex,
     selectedAnswers,
     secondsRemaining,
+    updatePageIndex,
   ];
 }
 

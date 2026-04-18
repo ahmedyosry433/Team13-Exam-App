@@ -39,7 +39,7 @@ class AnswerItem extends StatelessWidget {
           children: [
             if (type == QuestionType.multi)
               CheckBoxSelection(isSelected: isSelected),
-            if (type == QuestionType.single)
+            if (type == QuestionType.singleChoice)
               RadioSelection(isSelected: isSelected),
             SizedBox(width: AppSize.s12),
             Expanded(

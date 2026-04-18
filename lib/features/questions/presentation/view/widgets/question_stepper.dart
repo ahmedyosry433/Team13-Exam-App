@@ -1,3 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:exam_app/core/languages/locale_keys.g.dart';
 import 'package:exam_app/core/theme/app_colors.dart';
 import 'package:exam_app/core/theme/app_text_style.dart';
 import 'package:exam_app/core/values/app_size.dart';
@@ -19,7 +21,12 @@ class QuestionStepper extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
-          'Question $current of $total',
+          LocaleKeys.questions_question_of_total.tr(
+            namedArgs: {
+              'current': current.toString(),
+              'total': total.toString(),
+            },
+          ),
           style: 16.medium.copyWith(color: AppColors.gray53),
         ),
         SizedBox(height: AppSize.s12),
