@@ -116,7 +116,10 @@
         "language": "Language",
         "math": "Math",
         "art": "Art",
-        "science": "Science"
+        "science": "Science",
+        "explore": "Explore",
+        "result": "Result",
+        "profile": "Profile"
 
     }
 }

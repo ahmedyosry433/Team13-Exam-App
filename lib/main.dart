@@ -3,6 +3,7 @@ import 'package:exam_app/app.dart';
 import 'package:exam_app/config/di/injectable_config.dart';
 import 'package:exam_app/core/helper/bloc/bloc_observer.dart';
 import 'package:exam_app/core/languages/lang.dart';
+import 'package:exam_app/core/shared/cubit/navigation_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,7 +24,10 @@ void main() async {
       fallbackLocale: arabicLocale,
       startLocale: englishLocale,
       path: assetsLocalization,
-      child: OnlineExam(),
+      child: MultiBlocProvider(
+        providers: [BlocProvider(create: (_) => NavigationCubit())],
+        child: OnlineExam(),
+      ),
     ),
   );
 }
