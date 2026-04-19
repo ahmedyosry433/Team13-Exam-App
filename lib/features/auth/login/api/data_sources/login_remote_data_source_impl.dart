@@ -19,5 +19,12 @@ class LoginRemoteDataSourceImpl implements LoginRemoteDataSourceContract {
     } on DioException catch (e) {
       return Error(exception: ServerFailure.fromDioException(dioException: e));
     }
+     catch (e) {
+      return Error(
+        exception: ServerFailure(
+        errorMessage:e.toString(),
+        ),
+      );
+    }
   }
 }

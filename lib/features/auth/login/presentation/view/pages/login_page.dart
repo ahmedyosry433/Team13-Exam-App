@@ -1,3 +1,4 @@
+import 'package:exam_app/config/di/injectable_config.dart';
 import 'package:exam_app/core/routes/routes.dart';
 import 'package:exam_app/core/shared/widgets/custom_app_bar.dart';
 import 'package:exam_app/core/shared/widgets/custom_button.dart';
@@ -21,6 +22,9 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  late final LogInCubit _loginCubit;
+
   bool get _isFormReady =>
       _emailController.text.trim().isNotEmpty &&
       _passwordController.text.trim().length >= 8;
@@ -28,10 +32,18 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
+
+    _loginCubit = getIt<LogInCubit>();
+
     _emailController.addListener(() => setState(() {}));
     _passwordController.addListener(() => setState(() {}));
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<LoginCubit>().autoLoginIfTokenExists(context);
+      final savedEmail = ''; // Load saved email from storage
+      if (savedEmail.isNotEmpty) {
+        _emailController.text = savedEmail;
+        _loginCubit.toggleRememberMe();
+      }
     });
   }
 
@@ -39,26 +51,28 @@ class _LoginPageState extends State<LoginPage> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _loginCubit.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => LoginCubit(),
-      child: BlocConsumer<LoginCubit, LoginState>(
+    return BlocProvider.value(
+      value: _loginCubit,
+      child: BlocConsumer<LogInCubit, LoginState>(
         listener: (context, state) {
           if (state.loginSuccess == true) {
             context.go(Routes.home);
           }
         },
         builder: (context, state) {
-          final cubit = context.read<LoginCubit>();
+          final cubit = context.read<LogInCubit>();
+
           return Scaffold(
             appBar: AppBar(
               title: CustomAppBar(
                 title: AuthConsts.login,
-                padding: EdgeInsets.only(left: 16),
+                padding: const EdgeInsets.only(left: 16),
               ),
             ),
             body: Column(
@@ -69,7 +83,6 @@ class _LoginPageState extends State<LoginPage> {
                   emailError: state.emailError,
                   passwordError: state.passwordError,
                 ),
-
                 if (state.generalError != null)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -78,7 +91,6 @@ class _LoginPageState extends State<LoginPage> {
                       style: 13.regular.copyWith(color: Colors.red),
                     ),
                   ),
-
                 Padding(
                   padding: const EdgeInsets.only(
                     top: 4,
@@ -112,13 +124,11 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   ),
                 ),
-
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,
                     vertical: 16,
                   ),
-
                   child: state.isLoading
                       ? const CircularProgressIndicator()
                       : CustomButton(
@@ -134,7 +144,6 @@ class _LoginPageState extends State<LoginPage> {
                               : AppColors.gray87,
                         ),
                 ),
-
                 const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

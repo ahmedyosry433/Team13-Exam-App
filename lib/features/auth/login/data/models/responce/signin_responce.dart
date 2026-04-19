@@ -16,7 +16,7 @@ class SigninResponse {
   @JsonKey(name: "token")
   String? token;
   @JsonKey(name: "user")
-  Dto? user;
+  SignInDto? user;
 
   SigninResponse({this.message, this.token, this.user});
 

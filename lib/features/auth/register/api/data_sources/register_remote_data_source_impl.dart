@@ -10,14 +10,14 @@ import 'package:injectable/injectable.dart';
 @Injectable(as: RegisterRemoteDataSourceContract)
 class RegisterRemoteDataSourceImpl implements RegisterRemoteDataSourceContract {
   RegisterRemoteDataSourceImpl(this.signupApi);
-  final SignupApi signupApi;
+  final SignUpApi signupApi;
   @override
-   Future<Result<Signupresponce>> signup(SignupRequest uprequest) async {
+  Future<Result<Signupresponce>> signup(SignupRequest uprequest) async {
     try {
       final responce = await signupApi.signup(uprequest);
       return Success<Signupresponce>(data: responce);
     } on DioException catch (e) {
-  return Error(exception: ServerFailure.fromDioException(dioException: e));
-}
+      return Error(exception: ServerFailure.fromDioException(dioException: e));
+    }
   }
 }

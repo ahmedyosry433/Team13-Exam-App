@@ -28,7 +28,6 @@ class _RegisterPageState extends State<RegisterPage> {
   final _confirmPasswordController = TextEditingController();
   final _phoneController = TextEditingController();
 
-  
   bool _isPasswordHidden = true;
   bool _isConfirmPasswordHidden = true;
 
@@ -70,34 +69,37 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-     create: (_) => getIt<RegisterCubit>(),
-      child: BlocConsumer<RegisterCubit, RegisterState>(
-        buildWhen: (previous, current) =>
-            previous.isLoading != current.isLoading ||
-            previous.usernameError != current.usernameError ||
-            previous.firstNameError != current.firstNameError ||
-            previous.lastNameError != current.lastNameError ||
-            previous.emailError != current.emailError ||
-            previous.passwordError != current.passwordError ||
-            previous.confirmPasswordError != current.confirmPasswordError ||
-            previous.phoneError != current.phoneError ||
-            previous.generalError != current.generalError,
-        listener: (context, state) {
-          if (state.registerSuccess) {
-            context.go(Routes.home);
-          }
-        },
-        builder: (context, state) {
-          final cubit = context.read<RegisterCubit>();
-          return Scaffold(
-            appBar: AppBar(
-              title: CustomAppBar(
-                title: AuthConsts.register,
-                padding: EdgeInsets.only(left: 16),
-              ),
-            ),
-            body: SingleChildScrollView(
+   return BlocProvider(
+  create: (_) => getIt<RegisterCubit>(),
+  child: Scaffold(
+    appBar: AppBar(
+      title: CustomAppBar(
+        title: AuthConsts.register,
+        padding: EdgeInsets.only(left: 16),
+      ),
+    ),
+
+    body: BlocConsumer<RegisterCubit, RegisterState>(
+      buildWhen: (previous, current) =>
+          previous.isLoading != current.isLoading ||
+          previous.usernameError != current.usernameError ||
+          previous.firstNameError != current.firstNameError ||
+          previous.lastNameError != current.lastNameError ||
+          previous.emailError != current.emailError ||
+          previous.passwordError != current.passwordError ||
+          previous.confirmPasswordError != current.confirmPasswordError ||
+          previous.phoneError != current.phoneError ||
+          previous.generalError != current.generalError,
+
+      listener: (context, state) {
+        if (state.registerSuccess) {
+          context.go(Routes.home);
+        }
+      },
+
+      builder: (context, state) {
+        final cubit = context.read<RegisterCubit>();
+        return SingleChildScrollView(
               child: Column(
                 children: [
                   RegisterTextField(
@@ -115,13 +117,14 @@ class _RegisterPageState extends State<RegisterPage> {
                     passwordError: state.passwordError,
                     confirmPasswordError: state.confirmPasswordError,
                     phoneError: state.phoneError,
-                   
+
                     isPasswordHidden: _isPasswordHidden,
                     isConfirmPasswordHidden: _isConfirmPasswordHidden,
                     onTogglePassword: () =>
                         setState(() => _isPasswordHidden = !_isPasswordHidden),
                     onToggleConfirmPassword: () => setState(
-                      () => _isConfirmPasswordHidden = !_isConfirmPasswordHidden,
+                      () =>
+                          _isConfirmPasswordHidden = !_isConfirmPasswordHidden,
                     ),
                   ),
                   if (state.generalError != null)
@@ -143,13 +146,13 @@ class _RegisterPageState extends State<RegisterPage> {
                         : CustomButton(
                             title: AuthConsts.register,
                             onTap: () => cubit.register(
-                              username: _usernameController.text.trim(),
+                              userName: _usernameController.text.trim(),
                               firstName: _firstNameController.text.trim(),
                               lastName: _lastNameController.text.trim(),
                               email: _emailController.text.trim(),
                               password: _passwordController.text.trim(),
-                              confirmPassword:
-                                  _confirmPasswordController.text.trim(),
+                              confirmPassword: _confirmPasswordController.text
+                                  .trim(),
                               phone: _phoneController.text.trim(),
                             ),
                             backGroundColor: _isFormReady
@@ -179,10 +182,13 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ],
               ),
-            ),
-          );
+            );
+              
+            
+          
         },
       ),
+    )
     );
-  }
+}
 }

@@ -9,9 +9,9 @@ part 'register_api_client.g.dart';
 
 @injectable
 @RestApi(baseUrl: AppEndPoints.baseUrl)
-abstract class SignupApi {
+abstract class SignUpApi {
   @factoryMethod
-  factory SignupApi(Dio dio) = _SignupApi;
+  factory SignUpApi(Dio dio) = _SignupApi;
 
   @POST(AppEndPoints.signupEndpoint)
   Future<Signupresponce> signup(@Body() SignupRequest uprequest);

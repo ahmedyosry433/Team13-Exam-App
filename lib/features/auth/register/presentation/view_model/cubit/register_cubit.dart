@@ -6,14 +6,15 @@ import 'package:exam_app/features/auth/register/data/models/request/signup_reque
 import 'package:exam_app/features/auth/register/domain/use_case/register_use_case.dart';
 import 'package:injectable/injectable.dart';
 part 'register_states.dart';
+
 @Injectable()
 class RegisterCubit extends Cubit<RegisterState> {
   final RegisterUseCase _registerUseCase;
 
-  RegisterCubit(this._registerUseCase) : super( RegisterState());
+  RegisterCubit(this._registerUseCase) : super(RegisterState());
 
   Future<void> register({
-    required String username,
+    required String userName,
     required String firstName,
     required String lastName,
     required String email,
@@ -24,67 +25,77 @@ class RegisterCubit extends Cubit<RegisterState> {
     if (state.isLoading) return;
 
     /// clear errors + start loading
-    emit(state.copyWith(
-      isLoading: true,
-      usernameError: null,
-      firstNameError: null,
-      lastNameError: null,
-      emailError: null,
-      passwordError: null,
-      confirmPasswordError: null,
-      phoneError: null,
-      generalError: null,
-    ));
+    emit(
+      state.copyWith(
+        isLoading: true,
+        usernameError: null,
+        firstNameError: null,
+        lastNameError: null,
+        emailError: null,
+        passwordError: null,
+        confirmPasswordError: null,
+        phoneError: null,
+        generalError: null,
+      ),
+    );
 
     /// validation
-    final usernameErr =
-        username.trim().isEmpty ? AuthConsts.errorusername : null;
+    final userNameErr = userName.trim().isEmpty
+        ? AuthConsts.errorusername
+        : null;
 
-    final firstNameErr =
-        firstName.trim().isEmpty ? AuthConsts.errorfirstname : null;
+    final firstNameErr = firstName.trim().isEmpty
+        ? AuthConsts.errorfirstname
+        : null;
 
-    final lastNameErr =
-        lastName.trim().isEmpty ? AuthConsts.errorlastname : null;
+    final lastNameErr = lastName.trim().isEmpty
+        ? AuthConsts.errorlastname
+        : null;
 
-    final emailErr =
-        !AuthValidators.isValidEmail(email) ? AuthConsts.erroremail : null;
+    final emailErr = !AuthValidators.isValidEmail(email)
+        ? AuthConsts.erroremail
+        : null;
 
-    final passwordErr =
-        !AuthValidators.isValidPassword(password) ? AuthConsts.errorpassword : null;
+    final passwordErr = !AuthValidators.isValidPassword(password)
+        ? AuthConsts.errorpassword
+        : null;
 
     final confirmPasswordErr =
         !AuthValidators.isPasswordMatch(password, confirmPassword)
-            ? AuthConsts.errorconfirmpassword
-            : null;
+        ? AuthConsts.errorconfirmpassword
+        : null;
 
-    final phoneErr =
-        !AuthValidators.isValidPhone(phone) ? AuthConsts.errorphone : null;
+    final phoneErr = !AuthValidators.isValidPhone(phone)
+        ? AuthConsts.errorphone
+        : null;
 
     /// if validation failed
-    if (usernameErr != null ||
+    if (userNameErr != null ||
         firstNameErr != null ||
         lastNameErr != null ||
         emailErr != null ||
         passwordErr != null ||
         confirmPasswordErr != null ||
         phoneErr != null) {
-      emit(state.copyWith(
-        isLoading: false,
-        usernameError: usernameErr,
-        firstNameError: firstNameErr,
-        lastNameError: lastNameErr,
-        emailError: emailErr,
-        passwordError: passwordErr,
-        confirmPasswordError: confirmPasswordErr,
-        phoneError: phoneErr,
-      ));
+      emit(
+        state.copyWith(
+          isLoading: false,
+          usernameError: userNameErr,
+          firstNameError: firstNameErr,
+          lastNameError: lastNameErr,
+          emailError: emailErr,
+          passwordError: passwordErr,
+          confirmPasswordError: confirmPasswordErr,
+          phoneError: phoneErr,
+        ),
+      );
       return;
     }
 
     /// call API
     final result = await _registerUseCase(
       SignupRequest(
-        username: username,
+        userName: userName,
         firstName: firstName,
         lastName: lastName,
         email: email,
@@ -96,20 +107,14 @@ class RegisterCubit extends Cubit<RegisterState> {
 
     result.when(
       success: (_) {
-        emit(state.copyWith(
-          isLoading: false,
-          registerSuccess: true,
-        ));
+        emit(state.copyWith(isLoading: false, registerSuccess: true));
       },
       error: (exception) {
         final message = exception is Failures
             ? exception.errorMessage
             : AuthConsts.registerError;
 
-        emit(state.copyWith(
-          isLoading: false,
-          generalError: message,
-        ));
+        emit(state.copyWith(isLoading: false, generalError: message));
       },
     );
   }

@@ -33,5 +33,5 @@ class AppIcons {
 
   static const String iconsSearch = "assets/icons/search.svg";
 
-   static const String iconsback = "assets/icons/back.png";
+   static const String iconsBack = "assets/icons/back.png";
 }
