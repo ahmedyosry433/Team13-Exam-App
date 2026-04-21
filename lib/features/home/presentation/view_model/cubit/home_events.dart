@@ -1,1 +1,2 @@
-// TODO: presentation HomeEvents
+sealed class HomeEvents {}
+class GetAllSubjectsEvent extends HomeEvents {}
