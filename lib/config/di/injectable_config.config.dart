@@ -18,8 +18,22 @@ import 'package:internet_connection_checker_plus/internet_connection_checker_plu
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
 
 import '../../core/user_helper/user_helper.dart' as _i589;
+import '../../features/get_exam_on_subject/api/api_client/get_exam_on_subject_api_client.dart'
+    as _i26;
+import '../../features/get_exam_on_subject/api/datasources/get_exam_on_subject_remote_data_source_impl.dart'
+    as _i791;
+import '../../features/get_exam_on_subject/data/datasources/get_exam_on_subject_remote_data_source_contract.dart'
+    as _i188;
+import '../../features/get_exam_on_subject/data/repositories/get_exam_on_subject_repository_impl.dart'
+    as _i498;
+import '../../features/get_exam_on_subject/domain/repositories/get_exam_on_subject_repository.dart'
+    as _i963;
+import '../../features/get_exam_on_subject/domain/use_cases/get_exam_on_subject_use_case.dart'
+    as _i266;
+import '../../features/get_exam_on_subject/presentation/view_model/cubit/get_exam_on_subject_cubit.dart'
+    as _i1027;
 import '../api/app_interceptors.dart' as _i781;
-import 'register_module.dart' as _i746;
+import 'register_module.dart' as _i291;
 
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
@@ -43,10 +57,18 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i161.InternetConnection>(
       () => coreInjectableModule.internetConnection(),
     );
+    gh.factory<_i26.GetExamSubjectApiClient>(
+      () => _i26.GetExamSubjectApiClient(gh<_i361.Dio>()),
+    );
     gh.singleton<_i781.AppInterceptors>(
       () => _i781.AppInterceptors(
         dio: gh<_i361.Dio>(),
         fss: gh<_i558.FlutterSecureStorage>(),
+      ),
+    );
+    gh.factory<_i188.GetExamOnSubjectRemoteDataSourceContract>(
+      () => _i791.GetExamOnSubjectRemoteDataSourceImpl(
+        gh<_i26.GetExamSubjectApiClient>(),
       ),
     );
     gh.factory<_i589.UserHelper>(
@@ -55,8 +77,20 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i558.FlutterSecureStorage>(),
       ),
     );
+    gh.factory<_i963.GetExamOnSubjectRepository>(
+      () => _i498.GetExamOnSubjectRepositoryImpl(
+        gh<_i188.GetExamOnSubjectRemoteDataSourceContract>(),
+      ),
+    );
+    gh.factory<_i266.GetExamOnSubjectUseCase>(
+      () =>
+          _i266.GetExamOnSubjectUseCase(gh<_i963.GetExamOnSubjectRepository>()),
+    );
+    gh.factory<_i1027.GetExamOnSubjectCubit>(
+      () => _i1027.GetExamOnSubjectCubit(gh<_i266.GetExamOnSubjectUseCase>()),
+    );
     return this;
   }
 }
 
-class _$CoreInjectableModule extends _i746.CoreInjectableModule {}
+class _$CoreInjectableModule extends _i291.CoreInjectableModule {}

@@ -1,4 +1,5 @@
 import 'package:exam_app/core/routes/routes.dart';
+import 'package:exam_app/features/get_exam_on_subject/presentation/view/pages/get_exam_on_subject_page.dart';
 import 'package:exam_app/features/splash/splash_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -12,6 +13,12 @@ final GoRouter router = GoRouter(
     _customAnimatedGoRoute(
       route: Routes.splash,
       page: (state, context) => const SplashPage(),
+    ),
+    _customAnimatedGoRoute(
+      route: Routes.getExamOnSubject,
+      page: (state, context) => GetExamOnSubjectPage(
+        pageTitle: 'Exam Subjects', // static مؤقتاً
+      ),
     ),
   ],
 );
