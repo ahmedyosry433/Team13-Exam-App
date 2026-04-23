@@ -30,15 +30,12 @@ class ResultRadioButton extends StatelessWidget {
         shape: BoxShape.circle,
         border: Border.all(color: color, width: AppSize.s2),
       ),
-      child: isSelected
+      child: isSelected || isMissedCorrect
           ? Center(
               child: Container(
                 width: AppSize.s12,
                 height: AppSize.s12,
-                decoration: BoxDecoration(
-                  color: color,
-                  shape: BoxShape.circle,
-                ),
+                decoration: BoxDecoration(color: color, shape: BoxShape.circle),
               ),
             )
           : null,
