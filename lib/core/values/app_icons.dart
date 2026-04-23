@@ -1,5 +1,5 @@
-class AppIcons {
-  AppIcons._();
+abstract class AppIcons {
+ 
 
   static const String iconsCalendar = "assets/icons/Calendar.svg";
 
@@ -32,4 +32,6 @@ class AppIcons {
   static const String iconsResults = "assets/icons/results.svg";
 
   static const String iconsSearch = "assets/icons/search.svg";
+
+   static const String iconsBack = "assets/icons/back.png";
 }

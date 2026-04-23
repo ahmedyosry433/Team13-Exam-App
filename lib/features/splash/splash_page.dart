@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'package:exam_app/config/di/injectable_config.dart';
 import 'package:exam_app/core/routes/routes.dart';
 import 'package:exam_app/core/values/app_images.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 
 class SplashPage extends StatefulWidget {
@@ -16,6 +18,7 @@ class _SplashPageState extends State<SplashPage>
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
   late Animation<double> _scaleAnimation;
+
 
   @override
   void initState() {
@@ -43,11 +46,6 @@ class _SplashPageState extends State<SplashPage>
 
     _controller.forward();
 
-    Timer(const Duration(seconds: 4), () {
-      if (mounted) {
-        context.go(Routes.login);
-      }
-    });
   }
 
   @override

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class AppColors {
-  AppColors._();
+abstract class AppColors {
+ 
   // --- Primary and Brand Colors ---
   static const Color prime = Color(0xFF02369C); // main brand color
   static const Color primeAccent = Color(0xFF11CE19); // accent/brand green
@@ -45,6 +45,7 @@ class AppColors {
   static const Color gray05 = Color(0xFF050505);
   static const Color gray03 = Color(0xFF030303);
   static const Color gray53 = Color(0xFF535353);
+  static const Color gray = Color(0xFF535353);
 
   // --- Blues ---
   static const Color blue2C = Color(0xFF2C58AC);
