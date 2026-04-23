@@ -1,14 +1,14 @@
 import 'package:equatable/equatable.dart';
 
-class ForgetPasswordParams extends Equatable {
+class ForgetPasswordRequest extends Equatable {
   final String? email;
   final String? code;
   final String? newPassword;
 
-  const ForgetPasswordParams({this.email, this.code, this.newPassword});
+  const ForgetPasswordRequest({this.email, this.code, this.newPassword});
 
-  factory ForgetPasswordParams.fromJson(Map<String, dynamic> json) =>
-      ForgetPasswordParams(
+  factory ForgetPasswordRequest.fromJson(Map<String, dynamic> json) =>
+      ForgetPasswordRequest(
         email: json['email'] as String?,
         code: json['resetCode'] as String?,
         newPassword: json['newPassword'] as String?,
@@ -22,12 +22,12 @@ class ForgetPasswordParams extends Equatable {
     return data;
   }
 
-  ForgetPasswordParams copyWith({
+  ForgetPasswordRequest copyWith({
     String? email,
     String? code,
     String? newPassword,
   }) {
-    return ForgetPasswordParams(
+    return ForgetPasswordRequest(
       email: email ?? this.email,
       code: code ?? this.code,
       newPassword: newPassword ?? this.newPassword,

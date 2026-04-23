@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:exam_app/config/error/failures.dart';
+import 'package:exam_app/core/validations/validations.dart';
 import 'package:exam_app/features/auth/common/auth_consts/auth_consts.dart';
-import 'package:exam_app/features/auth/common/auth_consts/auth_validators/auth_validaters.dart';
 import 'package:exam_app/features/auth/register/data/models/request/signup_request.dart';
 import 'package:exam_app/features/auth/register/domain/use_case/register_use_case.dart';
 import 'package:injectable/injectable.dart';
@@ -51,24 +51,22 @@ class RegisterCubit extends Cubit<RegisterState> {
     final lastNameErr = lastName.trim().isEmpty
         ? AuthConsts.errorlastname
         : null;
+final emailErr = Validations.validateEmail(email) != null
+    ? AuthConsts.erroremail
+    : null;
 
-    final emailErr = !AuthValidators.isValidEmail(email)
-        ? AuthConsts.erroremail
-        : null;
+final passwordErr = Validations.validatePassword(password) != null
+    ? AuthConsts.errorpassword
+    : null;
 
-    final passwordErr = !AuthValidators.isValidPassword(password)
-        ? AuthConsts.errorpassword
-        : null;
-
-    final confirmPasswordErr =
-        !AuthValidators.isPasswordMatch(password, confirmPassword)
+final confirmPasswordErr =
+    Validations.validatePasswordVerification(password, confirmPassword) != null
         ? AuthConsts.errorconfirmpassword
         : null;
 
-    final phoneErr = !AuthValidators.isValidPhone(phone)
-        ? AuthConsts.errorphone
-        : null;
-
+final phoneErr = Validations.validatePhoneNumber(phone, 11) != null
+    ? AuthConsts.errorphone
+    : null;
     /// if validation failed
     if (userNameErr != null ||
         firstNameErr != null ||

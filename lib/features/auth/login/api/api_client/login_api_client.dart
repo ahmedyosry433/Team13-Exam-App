@@ -8,6 +8,7 @@ import 'package:retrofit/retrofit.dart';
 part 'login_api_client.g.dart';
 
 @injectable
+@LazySingleton()
 @RestApi(baseUrl: AppEndPoints.baseUrl)
 abstract class SigninApi {
   @factoryMethod

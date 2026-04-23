@@ -1,4 +1,6 @@
-class SigninEntity {
+import 'package:equatable/equatable.dart';
+
+class SigninEntity extends Equatable {
   final String? username;
   final String? firstName;
   final String? lastName;
@@ -22,4 +24,17 @@ class SigninEntity {
   });
 
   String? get token => null;
+  
+  @override
+  List<Object?> get props => [
+        username,
+        firstName,
+        lastName,
+        email,
+        phone,
+        role,
+        isVerified,
+        id,
+        createdAt,
+      ];
 }

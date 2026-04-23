@@ -1,6 +1,7 @@
 part of 'login_cubit.dart';
 
-class LoginState {
+
+class LoginState  {
   final bool isLoading;
   final bool rememberMe;
   final String? emailError;
@@ -8,7 +9,7 @@ class LoginState {
   final String? generalError;
   final bool? loginSuccess;
 
-  LoginState({
+ const LoginState({
     this.isLoading = false,
     this.rememberMe = false,
     this.emailError,
@@ -35,5 +36,8 @@ class LoginState {
       loginSuccess: loginSuccess ?? this.loginSuccess,
     );
   }
+  
+ 
+ 
   
 }

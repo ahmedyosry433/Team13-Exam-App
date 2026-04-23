@@ -1,5 +1,5 @@
-class AppIcons {
-  AppIcons._();
+abstract class AppIcons {
+ 
 
   static const String iconsCalendar = "assets/icons/Calendar.svg";
 

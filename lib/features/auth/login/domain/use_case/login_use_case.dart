@@ -10,7 +10,7 @@ final LoginRepositoryContract repository;
 
   LoginUseCase({ required this.repository});
   Future<Result<SigninEntity>> call(SigninRequest inrequest) async {
-    return await repository.signin(inrequest);
+    return  repository.signin(inrequest);
   }
 
 }

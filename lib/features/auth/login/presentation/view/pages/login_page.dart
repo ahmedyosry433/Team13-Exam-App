@@ -1,4 +1,3 @@
-import 'package:exam_app/config/di/injectable_config.dart';
 import 'package:exam_app/core/routes/routes.dart';
 import 'package:exam_app/core/shared/widgets/custom_app_bar.dart';
 import 'package:exam_app/core/shared/widgets/custom_button.dart';
@@ -22,27 +21,28 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
-  late final LogInCubit _loginCubit;
+  bool _rememberMe = false;
+  bool _isFormReady = false;
 
-  bool get _isFormReady =>
-      _emailController.text.trim().isNotEmpty &&
-      _passwordController.text.trim().length >= 8;
+  bool _checkFormReady() {
+    return _emailController.text.trim().isNotEmpty &&
+        _passwordController.text.trim().length >= 8;
+  }
 
   @override
   void initState() {
     super.initState();
 
-    _loginCubit = getIt<LogInCubit>();
-
-    _emailController.addListener(() => setState(() {}));
-    _passwordController.addListener(() => setState(() {}));
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final savedEmail = ''; // Load saved email from storage
+      final savedEmail = '';
       if (savedEmail.isNotEmpty) {
         _emailController.text = savedEmail;
-        _loginCubit.toggleRememberMe();
+        setState(() {
+          _rememberMe = true;
+          _isFormReady = _checkFormReady();
+        });
       }
     });
   }
@@ -51,123 +51,156 @@ class _LoginPageState extends State<LoginPage> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
-    _loginCubit.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: _loginCubit,
-      child: BlocConsumer<LogInCubit, LoginState>(
-        listener: (context, state) {
-          if (state.loginSuccess == true) {
-            context.go(Routes.home);
-          }
-        },
-        builder: (context, state) {
-          final cubit = context.read<LogInCubit>();
+    final cubit = context.read<LogInCubit>();
 
-          return Scaffold(
-            appBar: AppBar(
-              title: CustomAppBar(
-                title: AuthConsts.login,
-                padding: const EdgeInsets.only(left: 16),
-              ),
-            ),
-            body: Column(
-              children: [
-                LoginTextField(
-                  emailController: _emailController,
-                  passwordController: _passwordController,
-                  emailError: state.emailError,
-                  passwordError: state.passwordError,
+    return BlocListener<LogInCubit, LoginState>(
+      listener: (context, state) {
+        if (state.loginSuccess == true) {
+          context.go(Routes.home);
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: CustomAppBar(
+            title: AuthConsts.login,
+            padding: const EdgeInsets.only(left: 16),
+          ),
+        ),
+        body: Form(
+          key: _formKey,
+          onChanged: () {
+            final ready = _checkFormReady();
+            if (ready != _isFormReady) {
+              setState(() {
+                _isFormReady = ready;
+              });
+            }
+          },
+          child: Column(
+            children: [
+              LoginTextField(
+                emailController: _emailController,
+                passwordController: _passwordController,
+                emailError: context.select((LogInCubit c) => c.state.emailError),
+                passwordError: context.select(
+                  (LogInCubit c) => c.state.passwordError,
                 ),
-                if (state.generalError != null)
-                  Padding(
+              ),
+              Builder(
+                builder: (context) {
+                  final generalError = context.select(
+                    (LogInCubit c) => c.state.generalError,
+                  );
+
+                  if (generalError == null) return const SizedBox.shrink();
+
+                  return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Text(
-                      state.generalError!,
+                      generalError,
                       style: 13.regular.copyWith(color: Colors.red),
                     ),
-                  ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 4,
-                    left: 16,
-                    right: 16,
-                    bottom: 48,
-                  ),
-                  child: Row(
-                    children: [
-                      Checkbox(
-                        value: state.rememberMe,
-                        onChanged: (_) => cubit.toggleRememberMe(),
-                      ),
-                      Text(
-                        AuthConsts.rememberMe,
-                        style: 13.regular.copyWith(color: AppColors.gray),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: AppSize.s86),
-                        child: InkWell(
-                          onTap: () {},
-                          child: Text(
-                            AuthConsts.forgotPassword,
-                            style: 12.regular.copyWith(
-                              color: AppColors.gray,
-                              decoration: TextDecoration.underline,
+                  );
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 4,
+                  left: 16,
+                  right: 16,
+                  bottom: 48,
+                ),
+                child: StatefulBuilder(
+                  builder: (context, setInnerState) {
+                    return Row(
+                      children: [
+                        Checkbox(
+                          value: _rememberMe,
+                          onChanged: (value) {
+                            setInnerState(() {
+                              _rememberMe = value ?? false;
+                            });
+                            cubit.toggleRememberMe();
+                          },
+                        ),
+                        Text(
+                          AuthConsts.rememberMe,
+                          style: 13.regular.copyWith(color: AppColors.gray),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: AppSize.s86),
+                          child: InkWell(
+                            onTap: () {},
+                            child: Text(
+                              AuthConsts.forgotPassword,
+                              style: 12.regular.copyWith(
+                                color: AppColors.gray,
+                                decoration: TextDecoration.underline,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    );
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 16,
+                ),
+                child: BlocBuilder<LogInCubit, LoginState>(
+                  buildWhen: (previous, current) =>
+                      previous.isLoading != current.isLoading,
+                  builder: (context, state) {
+                    if (state.isLoading) {
+                      return const CircularProgressIndicator();
+                    }
+
+                    return CustomButton(
+                      title: AuthConsts.login,
+                      onTap: _isFormReady
+                          ? () => cubit.login(
+                                email: _emailController.text.trim(),
+                                password: _passwordController.text.trim(),
+                              )
+                          : null,
+                      backGroundColor: _isFormReady
+                          ? AppColors.blue02
+                          : AppColors.gray87,
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    AuthConsts.donothaveaccount,
+                    style: 16.regular.copyWith(color: AppColors.gray),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 16,
-                  ),
-                  child: state.isLoading
-                      ? const CircularProgressIndicator()
-                      : CustomButton(
-                          title: AuthConsts.login,
-                          onTap: _isFormReady
-                              ? () => cubit.login(
-                                  email: _emailController.text.trim(),
-                                  password: _passwordController.text.trim(),
-                                )
-                              : null,
-                          backGroundColor: _isFormReady
-                              ? AppColors.blue02
-                              : AppColors.gray87,
-                        ),
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      AuthConsts.donothaveaccount,
-                      style: 16.regular.copyWith(color: AppColors.gray),
-                    ),
-                    InkWell(
-                      onTap: () => context.go(Routes.register),
-                      child: Text(
-                        AuthConsts.signup,
-                        style: 16.regular.copyWith(
-                          color: AppColors.blue02,
-                          decoration: TextDecoration.underline,
-                        ),
+                  InkWell(
+                    onTap: () => context.go(Routes.register),
+                    child: Text(
+                      AuthConsts.signup,
+                      style: 16.regular.copyWith(
+                        color: AppColors.blue02,
+                        decoration: TextDecoration.underline,
                       ),
                     ),
-                  ],
-                ),
-              ],
-            ),
-          );
-        },
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -18,7 +18,6 @@ class _SplashPageState extends State<SplashPage>
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
   late Animation<double> _scaleAnimation;
-     final FlutterSecureStorage _fss = getIt<FlutterSecureStorage>();
 
 
   @override
@@ -47,19 +46,6 @@ class _SplashPageState extends State<SplashPage>
 
     _controller.forward();
 
-   Timer(const Duration(seconds: 4), () => _navigate());
-  }
-
-  Future<void> _navigate() async {
-    if (!mounted) return;
-    final token = await _fss.read(key: 'token');
-    if (!mounted) return;
-
-    if (token != null) {
-      context.go(Routes.home);
-    } else {
-      context.go(Routes.login);
-    }
   }
 
   @override

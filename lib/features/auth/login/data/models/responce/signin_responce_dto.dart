@@ -48,6 +48,6 @@ class SignInDto {
     createdAt: createdAt ?? DateTime.now(),
   );
 
-  factory SignInDto.fromJson(Map<String, dynamic> json) => _$DtoFromJson(json);
-  Map<String, dynamic> toJson() => _$DtoToJson(this);
+  factory SignInDto.fromJson(Map<String, dynamic> json) => _$SignInDtoFromJson(json);
+  Map<String, dynamic> toJson() => _$SignInDtoToJson(this);
 }

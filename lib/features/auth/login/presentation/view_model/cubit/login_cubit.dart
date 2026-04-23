@@ -1,12 +1,13 @@
-// ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
 import 'package:exam_app/config/di/injectable_config.dart';
 import 'package:exam_app/config/error/failures.dart';
+import 'package:exam_app/core/validations/validations.dart';
 import 'package:exam_app/features/auth/common/auth_consts/auth_consts.dart';
-import 'package:exam_app/features/auth/common/auth_consts/auth_validators/auth_validaters.dart';
 import 'package:exam_app/features/auth/login/data/models/request/signin_request.dart';
 import 'package:exam_app/features/auth/login/domain/use_case/login_use_case.dart';
 import 'package:injectable/injectable.dart';
+
+
 part 'login_state.dart';
 
 @Injectable()
@@ -28,12 +29,12 @@ class LogInCubit extends Cubit<LoginState> {
         generalError: null,
       ),
     );
-
-    if (!AuthValidators.isValidEmail(email)) {
+    if (Validations.validateEmail(email) != null) {
       emit(state.copyWith(isLoading: false, emailError: AuthConsts.erroremail));
       return;
     }
-    if (!AuthValidators.isValidPassword(password)) {
+
+    if (Validations.validatePassword(password) != null) {
       emit(
         state.copyWith(
           isLoading: false,

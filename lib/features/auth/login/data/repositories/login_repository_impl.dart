@@ -1,6 +1,7 @@
 import 'package:exam_app/config/base_response/base_response.dart';
 import 'package:exam_app/config/di/injectable_config.dart';
 import 'package:exam_app/config/error/failures.dart';
+import 'package:exam_app/core/values/api_param.dart';
 import 'package:exam_app/features/auth/common/auth_consts/auth_consts.dart';
 import 'package:exam_app/features/auth/login/data/data_sources/login_remote_data_source_contract.dart';
 import 'package:exam_app/features/auth/login/data/models/request/signin_request.dart';
@@ -27,7 +28,7 @@ class LoginRepositoryImpl implements LoginRepositoryContract {
           }
 
           final fss = getIt<FlutterSecureStorage>();
-          await fss.write(key: 'token', value: data.token);
+          await fss.write(key: ApiParam.token, value: data.token);
 
           final entity = data.user?.toDomain();
 

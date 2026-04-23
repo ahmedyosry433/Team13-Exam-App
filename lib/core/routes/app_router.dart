@@ -16,6 +16,9 @@ final navigatorKey = GlobalKey<NavigatorState>();
 final GoRouter router = GoRouter(
   initialLocation: Routes.splash,
   navigatorKey: navigatorKey,
+  errorBuilder: (context, state) => Scaffold(
+    body: Center(child: Text(state.error?.toString() ?? 'Route not found')),
+  ),
   routes: [
     _customAnimatedGoRoute(
       route: Routes.splash,

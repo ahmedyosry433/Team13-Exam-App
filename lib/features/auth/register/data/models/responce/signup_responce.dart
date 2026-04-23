@@ -1,4 +1,3 @@
-
 import 'package:exam_app/features/auth/register/data/models/responce/signup_responce_dto.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'dart:convert';
@@ -17,7 +16,7 @@ class Signupresponce {
   @JsonKey(name: "token")
   String? token;
   @JsonKey(name: "user")
-  Dto? user;
+  UserDto? user;
 
   Signupresponce({this.message, this.token, this.user});
 

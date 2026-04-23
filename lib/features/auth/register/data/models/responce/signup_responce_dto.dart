@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'signup_responce_dto.g.dart';
 
 @JsonSerializable()
-class Dto {
+class UserDto {
   @JsonKey(name: "username")
   String? username;
   @JsonKey(name: "firstName")
@@ -23,7 +23,7 @@ class Dto {
   @JsonKey(name: "createdAt")
   DateTime? createdAt;
 
-  Dto({
+  UserDto({
     this.username,
     this.firstName,
     this.lastName,
@@ -34,20 +34,20 @@ class Dto {
     this.id,
     this.createdAt,
   });
-  
-  SignupEntity toDomain() => SignupEntity(
-        username: username ?? '',
-        firstName: firstName ?? '',
-        lastName: lastName ?? '',
-        email: email ?? '',
-        phone: phone ?? '',
-        role: role ?? '',
-        isVerified: isVerified ?? false,
-        id: id ?? '',
-        createdAt: createdAt ?? DateTime.now(),
-      );
 
-  factory Dto.fromJson(Map<String, dynamic> json) => _$DtoFromJson(json);
+  SignupEntity toDomain() => SignupEntity(
+    username: username ?? '',
+    firstName: firstName ?? '',
+    lastName: lastName ?? '',
+    email: email ?? '',
+    phone: phone ?? '',
+    role: role ?? '',
+    isVerified: isVerified ?? false,
+    id: id ?? '',
+    createdAt: createdAt ?? DateTime.now(),
+  );
+
+  factory UserDto.fromJson(Map<String, dynamic> json) => _$DtoFromJson(json);
 
   Map<String, dynamic> toJson() => _$DtoToJson(this);
 }

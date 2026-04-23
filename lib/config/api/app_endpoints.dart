@@ -1,5 +1,5 @@
-class AppEndPoints {
-  AppEndPoints._();
+abstract class AppEndPoints {
+  
   static const String baseUrl = 'https://exam.elevateegy.com/api/v1';
   static const String signupEndpoint = '$baseUrl/auth/signup';
   static const String signinEndpoint = '$baseUrl/auth/signin';
