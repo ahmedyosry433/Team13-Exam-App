@@ -19,7 +19,14 @@
         "delete": "حذف",
         "no_internet": "لا يوجد اتصال بالإنترنت!",
         "check_internet": "تحقق من اتصالك بالإنترنت وحاول مرة أخرى.",
-        "logout_success": "تم تسجيل الخروج بنجاح"
+        "logout_success": "تم تسجيل الخروج بنجاح",
+        "Back": "رجوع",
+        "Next": "التالي",
+        "finish": "إنهاء",
+        "exam": "اختبار",
+        "view_score": "عرض النتيجة",
+        "time_out": "انتهى الوقت",
+        "start_again": "ابدأ مرة أخرى"
     },
     "custom_widget": {
         "loading": "جار التحميل...",
@@ -108,5 +115,12 @@
         "email_sent_message": "تم إرسال رمز التحقق إلى بريدك الإلكتروني بنجاح",
         "code_correct": "الرمز صحيح ، يرجى إعادة تعيين كلمة المرور",
         "password_reset_success": "تم إعادة تعيين كلمة المرور بنجاح ، يرجى تسجيل الدخول مرة أخرى"
+    },
+    "questions": {
+        "question_of_total": "السؤال {current} من {total}",
+        "show_results": "عرض النتيجة",
+        "exam_score": "نتيجة الاختبار",
+        "correct": "صحيح",
+        "incorrect": "غير صحيح"
     }
 }

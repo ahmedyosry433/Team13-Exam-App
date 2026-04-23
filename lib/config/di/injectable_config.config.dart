@@ -18,6 +18,20 @@ import 'package:internet_connection_checker_plus/internet_connection_checker_plu
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
 
 import '../../core/user_helper/user_helper.dart' as _i589;
+import '../../features/questions/api/api_client/questions_api_client.dart'
+    as _i849;
+import '../../features/questions/api/datasources/questions_remote_data_source_impl.dart'
+    as _i450;
+import '../../features/questions/data/datasources/questions_remote_data_source_contract.dart'
+    as _i4;
+import '../../features/questions/data/repositories/questions_repository_impl.dart'
+    as _i416;
+import '../../features/questions/domain/repositories/questions_repository.dart'
+    as _i358;
+import '../../features/questions/domain/use_cases/get_questions_by_exam_id_use_case.dart'
+    as _i216;
+import '../../features/questions/presentation/view_model/cubit/questions_cubit.dart'
+    as _i875;
 import '../api/app_interceptors.dart' as _i781;
 import 'register_module.dart' as _i291;
 
@@ -43,6 +57,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i161.InternetConnection>(
       () => coreInjectableModule.internetConnection(),
     );
+    gh.factory<_i849.QuestionsApiClient>(
+      () => _i849.QuestionsApiClient(gh<_i361.Dio>()),
+    );
     gh.singleton<_i781.AppInterceptors>(
       () => _i781.AppInterceptors(
         dio: gh<_i361.Dio>(),
@@ -54,6 +71,22 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i460.SharedPreferences>(),
         gh<_i558.FlutterSecureStorage>(),
       ),
+    );
+    gh.factory<_i4.QuestionsRemoteDataSourceContract>(
+      () => _i450.QuestionsRemoteDataSourceImpl(gh<_i849.QuestionsApiClient>()),
+    );
+    gh.factory<_i358.QuestionsRepositoryContract>(
+      () => _i416.QuestionsRepositoryImpl(
+        gh<_i4.QuestionsRemoteDataSourceContract>(),
+      ),
+    );
+    gh.factory<_i216.GetQuestionsByExamIdUseCase>(
+      () => _i216.GetQuestionsByExamIdUseCase(
+        gh<_i358.QuestionsRepositoryContract>(),
+      ),
+    );
+    gh.factory<_i875.QuestionsCubit>(
+      () => _i875.QuestionsCubit(gh<_i216.GetQuestionsByExamIdUseCase>()),
     );
     return this;
   }
