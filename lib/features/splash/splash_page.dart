@@ -54,15 +54,10 @@ class _SplashPageState extends State<SplashPage>
     if (!mounted) return;
 
     if (token != null) {
-      context.go(Routes.home);
+      context.go(Routes.getExamOnSubject);
     } else {
-      context.go(Routes.login);
+      context.go(Routes.getExamOnSubject);
     }
-    Timer(const Duration(seconds: 4), () {
-      if (mounted) {
-        context.go(Routes.getExamOnSubject);
-      }
-    });
   }
 
   @override

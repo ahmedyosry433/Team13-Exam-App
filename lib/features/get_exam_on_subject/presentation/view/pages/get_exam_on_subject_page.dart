@@ -11,16 +11,14 @@ class GetExamOnSubjectPage extends StatelessWidget {
   // TODO: remove when subjects branch is merged
   static const String _tempSubjectId = '69d980107c82914570305dc3';
 
-  const GetExamOnSubjectPage({
-    super.key,
-    required this.pageTitle,
-  });
+  const GetExamOnSubjectPage({super.key, required this.pageTitle});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => GetIt.I<GetExamOnSubjectCubit>()
-        ..doevent(GetExamOnSubjectEvent(subjectId: _tempSubjectId)),
+      create: (_) =>
+          GetIt.I<GetExamOnSubjectCubit>()
+            ..doevent(GetExamOnSubjectEvent(subjectId: _tempSubjectId)),
       child: GetExamOnSubjectBody(pageTitle: pageTitle),
     );
   }
