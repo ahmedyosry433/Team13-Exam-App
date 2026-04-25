@@ -76,6 +76,22 @@ import '../../features/questions/domain/use_cases/get_questions_by_exam_id_use_c
     as _i216;
 import '../../features/questions/presentation/view_model/cubit/questions_cubit.dart'
     as _i875;
+import '../db/isar_service.dart' as _i976;
+import '../../features/results/api/datasources/results_local_data_source_impl.dart'
+    as _i677;
+import '../../features/results/data/datasources/results_local_data_source_contract.dart'
+    as _i171;
+import '../../features/results/data/repositories/results_repository_impl.dart'
+    as _i383;
+
+import '../../features/results/domain/repositories/results_repository_contract.dart'
+    as _i487;
+import '../../features/results/domain/use_cases/get_all_results_use_case.dart'
+    as _i474;
+import '../../features/results/domain/use_cases/save_result_use_case.dart'
+    as _i799;
+import '../../features/results/presentation/view_model/cubit/results_cubit.dart'
+    as _i10;
 import '../api/app_interceptors.dart' as _i781;
 import 'register_module.dart' as _i291;
 
@@ -93,6 +109,7 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i609.LoginCubit>(() => _i609.LoginCubit());
     gh.singleton<_i361.Dio>(() => coreInjectableModule.dio());
+    gh.singleton<_i976.IsarService>(() => _i976.IsarService());
     gh.lazySingleton<_i558.FlutterSecureStorage>(
       () => coreInjectableModule.secureStorage(),
     );
@@ -119,25 +136,6 @@ extension GetItInjectableX on _i174.GetIt {
         fss: gh<_i558.FlutterSecureStorage>(),
       ),
     );
-    gh.factory<_i913.ForgetPasswordRemoteDataSourceContract>(
-      () => _i358.ForgetPasswordRemoteDataSourceImpl(
-        apiClient: gh<_i892.ForgetPasswordApiClient>(),
-      ),
-    );
-    gh.factory<_i953.RegisterRemoteDataSourceContract>(
-      () => _i743.RegisterRemoteDataSourceImpl(gh<_i517.SignupApi>()),
-    );
-    gh.factory<_i129.ForgetPasswordRepository>(
-      () => _i787.ForgetPasswordRepositoryImpl(
-        remoteDataSourceContract:
-            gh<_i913.ForgetPasswordRemoteDataSourceContract>(),
-      ),
-    );
-    gh.factory<_i862.SendOtpUseCase>(
-      () => _i862.SendOtpUseCase(
-        repository: gh<_i129.ForgetPasswordRepository>(),
-      ),
-    );
     gh.factory<_i589.UserHelper>(
       () => _i589.UserHelper(
         gh<_i460.SharedPreferences>(),
@@ -147,39 +145,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i4.QuestionsRemoteDataSourceContract>(
       () => _i450.QuestionsRemoteDataSourceImpl(gh<_i849.QuestionsApiClient>()),
     );
-    gh.factory<_i176.LoginRepositoryContract>(
-      () =>
-          _i470.LoginRepositoryImpl(gh<_i183.LoginRemoteDataSourceContract>()),
-    );
-    gh.factory<_i630.LoginUseCase>(
-      () => _i630.LoginUseCase(repository: gh<_i176.LoginRepositoryContract>()),
-    );
-    gh.factory<_i57.RegisterRepositoryContract>(
-      () => _i200.RegisterRepositoryImpl(
-        gh<_i953.RegisterRemoteDataSourceContract>(),
-      ),
-    );
-    gh.factory<_i56.ResetPasswordUseCase>(
-      () => _i56.ResetPasswordUseCase(gh<_i129.ForgetPasswordRepository>()),
-    );
-    gh.factory<_i798.VerifyResetCodeUseCase>(
-      () => _i798.VerifyResetCodeUseCase(gh<_i129.ForgetPasswordRepository>()),
-    );
-    gh.factory<_i955.ForgetPasswordCubit>(
-      () => _i955.ForgetPasswordCubit(
-        gh<_i862.SendOtpUseCase>(),
-        gh<_i798.VerifyResetCodeUseCase>(),
-        gh<_i56.ResetPasswordUseCase>(),
-      ),
-    );
     gh.factory<_i358.QuestionsRepositoryContract>(
       () => _i416.QuestionsRepositoryImpl(
         gh<_i4.QuestionsRemoteDataSourceContract>(),
-      ),
-    );
-    gh.factory<_i21.RegisterUseCase>(
-      () => _i21.RegisterUseCase(
-        repository: gh<_i57.RegisterRepositoryContract>(),
       ),
     );
     gh.factory<_i216.GetQuestionsByExamIdUseCase>(
@@ -191,7 +159,10 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i444.RegisterCubit(gh<_i21.RegisterUseCase>()),
     );
     gh.factory<_i875.QuestionsCubit>(
-      () => _i875.QuestionsCubit(gh<_i216.GetQuestionsByExamIdUseCase>()),
+      () => _i875.QuestionsCubit(
+        gh<_i216.GetQuestionsByExamIdUseCase>(),
+        gh<_i799.SaveResultUseCase>(),
+      ),
     );
     return this;
   }

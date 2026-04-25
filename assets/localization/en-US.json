@@ -26,7 +26,8 @@
         "exam": "Exam",
         "view_score": "View score",
         "time_out": "Time out",
-        "start_again": "Start again"
+        "start_again": "Start again",
+        "answers": "Answers"
     },
     "custom_widget": {
         "loading": "Loading...",

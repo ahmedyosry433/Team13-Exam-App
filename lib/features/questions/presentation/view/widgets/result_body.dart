@@ -11,6 +11,8 @@ import 'package:exam_app/features/questions/presentation/view_model/cubit/questi
 import 'package:exam_app/features/questions/presentation/view_model/cubit/questions_events.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:exam_app/core/routes/routes.dart';
 
 class ResultView extends StatelessWidget {
   final QuestionsResult result;
@@ -62,7 +64,7 @@ class ResultView extends StatelessWidget {
             CustomButton(
               title: LocaleKeys.questions_show_results.tr(),
               onTap: () {
-                //TODO: Future screen: review questions
+                context.push(Routes.results, extra: result);
               },
             ),
             SizedBox(height: AppSize.s16),

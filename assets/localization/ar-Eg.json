@@ -26,7 +26,8 @@
         "exam": "اختبار",
         "view_score": "عرض النتيجة",
         "time_out": "انتهى الوقت",
-        "start_again": "ابدأ مرة أخرى"
+        "start_again": "ابدأ مرة أخرى",
+        "answers": "الإجابات"
     },
     "custom_widget": {
         "loading": "جار التحميل...",
