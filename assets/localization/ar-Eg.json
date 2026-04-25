@@ -48,7 +48,8 @@
         "select_country": "اختر الدولة",
         "gallery": "المعرض",
         "camera": "الكاميرا",
-        "crop_image": "قص الصورة"
+        "crop_image": "قص الصورة",
+        "survey": "استبيان"
     },
     "date_time": {
         "from": "منذ",
@@ -116,6 +117,15 @@
         "code_correct": "الرمز صحيح ، يرجى إعادة تعيين كلمة المرور",
         "password_reset_success": "تم إعادة تعيين كلمة المرور بنجاح ، يرجى تسجيل الدخول مرة أخرى"
     },
+    "home": {
+        "title": " تصفح حسب الموضوع ",
+        "language": "اللغة",
+        "math": "الرياضيات",
+        "art": "الفن",
+        "science": "العلوم",
+        "explore": "استكشف",
+        "result": "النتيجة",
+        "profile": "الملف الشخصي"
     "questions": {
         "question_of_total": "السؤال {current} من {total}",
         "show_results": "عرض النتيجة",

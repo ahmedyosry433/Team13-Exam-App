@@ -7,6 +7,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
 
 import 'status_code.dart';
+// الكلاس ده بيعمل  بيضيف التوكين تلقائى فكل ريكويست  وكمان لو صلاحسة التوكين خلصت  بيعمل لوج اوت تلقائى كمان بيلغى الريكويست لو حصل مشكلة
 
 @singleton
 class AppInterceptors extends Interceptor {
@@ -22,6 +23,12 @@ class AppInterceptors extends Interceptor {
   ) async {
     options.cancelToken = getIt<CancelToken>();
     String? authToken = await fss.read(key: Apikeys.accessToken);
+    //if (authToken != null && authToken.isNotEmpty) {
+      // options.headers['Authorization'] = 'Bearer $authToken';
+      authToken =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ZTEyZjViMDRkYTBkNGNmNTU2YTdlOSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzc2MzY1NDAzfQ.uXt2mGOY2_l1Xzk-wAbLQ6IzzxDkyVwuYLiwpQRnA2k";
+      options.headers[Apikeys.token] = authToken;
+    //}
     // if (authToken != null && authToken.isNotEmpty) {
     // options.headers['Authorization'] = 'Bearer $authToken';
 

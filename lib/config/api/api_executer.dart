@@ -6,6 +6,7 @@ import 'package:exam_app/core/languages/locale_keys.g.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 import '../di/injectable_config.dart';
+// This function is used to execute API calls and handle errors in a consistent way across the app.
 
 Future<Result<T>> executeApi<T>(Future<T> Function() apiCall) async {
   if (!await getIt.get<InternetConnection>().hasInternetAccess) {
