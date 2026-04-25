@@ -1,6 +1,10 @@
+import 'package:exam_app/config/di/injectable_config.dart';
 import 'package:exam_app/core/routes/routes.dart';
+import 'package:exam_app/features/edit_profile/presentation/view/pages/edit_profile_screen.dart';
+import 'package:exam_app/features/edit_profile/presentation/view_model/cubit/edit_profile_cubit.dart';
 import 'package:exam_app/features/splash/splash_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
@@ -12,6 +16,13 @@ final GoRouter router = GoRouter(
     _customAnimatedGoRoute(
       route: Routes.splash,
       page: (state, context) => const SplashPage(),
+    ),
+    _customAnimatedGoRoute(
+      route: Routes.editProfile,
+      page: (state, context) => BlocProvider(
+        create: (_) => getIt<EditProfileCubit>(),
+        child: const EditProfileScreen(),
+      ),
     ),
   ],
 );
