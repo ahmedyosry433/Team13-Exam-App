@@ -7,6 +7,7 @@ class AppEndPoints {
   static const String forgetPasswordEndpoint = '/auth/forgotPassword';
   static const String verifyCodeEndpoint = '/auth/verifyResetCode';
   static const String resetPasswordEndpoint = '/auth/resetPassword';
+  static const String getAllSubjects = '$baseUrl/subjects';
   static const String getProductsEndpoint = '$baseUrl/products';
   static const String getCategoriesEndpoint = '$baseUrl/categories';
   static const String question = '$baseUrl/questions';

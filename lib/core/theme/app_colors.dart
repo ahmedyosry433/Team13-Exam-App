@@ -55,6 +55,7 @@ class AppColors {
   static const Color blue0112 = Color(0xFF011234);
   static const Color blue000B = Color(0xFF000B1F);
   static const Color blueDF = Color(0xFFDFE7F7);
+  static const Color blueED = Color(0xFFEDEFF3);
 
   // --- Utility Colors ---
   static const Color white = Color(0xFFFFFFFF);

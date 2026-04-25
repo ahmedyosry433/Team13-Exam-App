@@ -7,6 +7,8 @@ import 'package:exam_app/features/auth/login/presentation/view_model/cubit/login
 import 'package:exam_app/features/auth/register/presentation/view/pages/register_page.dart';
 import 'package:exam_app/features/auth/register/presentation/view_model/cubit/register_cubit.dart';
 import 'package:exam_app/features/forget_password/presentation/view/pages/forget_password_page.dart';
+
+import 'package:exam_app/features/navigation/navbar_page.dart';
 import 'package:exam_app/features/get_exam_on_subject/presentation/view/pages/get_exam_on_subject_page.dart';
 import 'package:exam_app/features/edit_profile/presentation/view/pages/edit_profile_screen.dart';
 import 'package:exam_app/features/edit_profile/presentation/view_model/cubit/edit_profile_cubit.dart';
@@ -26,6 +28,11 @@ final GoRouter router = GoRouter(
     _customAnimatedGoRoute(
       route: Routes.splash,
       page: (state, context) => const SplashPage(),
+    ),
+    _customAnimatedGoRoute(
+      route: Routes.navbar,
+      page: (state, context) =>
+          NavbarPage(key: ValueKey(context.locale.languageCode.toString())),
     ),
     _customAnimatedGoRoute(
       route: Routes.login,

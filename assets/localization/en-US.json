@@ -49,7 +49,8 @@
         "select_country": "Select Country",
         "gallery": "Gallery",
         "camera": "Camera",
-        "crop_image": "Crop Image"
+        "crop_image": "Crop Image",
+        "survey": "Survey"
     },
     "date_time": {
         "from": "From",
@@ -118,6 +119,16 @@
         "code_correct": "Code is correct, please reset your password",
         "password_reset_success": "Your password has been reset successfully, please log in again"
     },
+    "home": {
+        "title": "Browse by subject",
+        "language": "Language",
+        "math": "Math",
+        "art": "Art",
+        "science": "Science",
+        "explore": "Explore",
+        "result": "Result",
+        "profile": "Profile"
+
     "questions": {
         "question_of_total": "Question {current} of {total}",
         "show_results": "Show results",
