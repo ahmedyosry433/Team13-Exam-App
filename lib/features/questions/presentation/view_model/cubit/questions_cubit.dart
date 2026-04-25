@@ -5,6 +5,7 @@ import 'package:exam_app/config/base_state/base_state.dart';
 import 'package:exam_app/features/questions/domain/entities/question_entity.dart';
 import 'package:exam_app/features/questions/domain/use_cases/get_questions_by_exam_id_use_case.dart';
 import 'package:exam_app/features/questions/presentation/view_model/cubit/questions_events.dart';
+import 'package:exam_app/features/results/domain/use_cases/save_result_use_case.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 part 'questions_states.dart';
@@ -12,8 +13,9 @@ part 'questions_states.dart';
 @injectable
 class QuestionsCubit extends Cubit<QuestionsStates> {
   final GetQuestionsByExamIdUseCase _getQuestionsByExamIdUseCase;
+  final SaveResultUseCase _saveResultUseCase;
 
-  QuestionsCubit(this._getQuestionsByExamIdUseCase)
+  QuestionsCubit(this._getQuestionsByExamIdUseCase, this._saveResultUseCase)
     : super(const QuestionsStates());
 
   void doIndented(QuestionsEvents event) {
@@ -122,6 +124,9 @@ class QuestionsCubit extends Cubit<QuestionsStates> {
       questions: state.questions,
       selectedAnswers: state.selectedAnswers,
     );
+
+    // Save the result to local database
+    _saveResultUseCase(result);
 
     emit(state.copyWith(submitExamState: BaseState.success(result)));
   }

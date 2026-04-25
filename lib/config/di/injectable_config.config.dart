@@ -32,6 +32,22 @@ import '../../features/questions/domain/use_cases/get_questions_by_exam_id_use_c
     as _i216;
 import '../../features/questions/presentation/view_model/cubit/questions_cubit.dart'
     as _i875;
+import '../db/isar_service.dart' as _i976;
+import '../../features/results/api/datasources/results_local_data_source_impl.dart'
+    as _i677;
+import '../../features/results/data/datasources/results_local_data_source_contract.dart'
+    as _i171;
+import '../../features/results/data/repositories/results_repository_impl.dart'
+    as _i383;
+
+import '../../features/results/domain/repositories/results_repository_contract.dart'
+    as _i487;
+import '../../features/results/domain/use_cases/get_all_results_use_case.dart'
+    as _i474;
+import '../../features/results/domain/use_cases/save_result_use_case.dart'
+    as _i799;
+import '../../features/results/presentation/view_model/cubit/results_cubit.dart'
+    as _i10;
 import '../api/app_interceptors.dart' as _i781;
 import 'register_module.dart' as _i291;
 
@@ -48,6 +64,7 @@ extension GetItInjectableX on _i174.GetIt {
       preResolve: true,
     );
     gh.singleton<_i361.Dio>(() => coreInjectableModule.dio());
+    gh.singleton<_i976.IsarService>(() => _i976.IsarService());
     gh.lazySingleton<_i558.FlutterSecureStorage>(
       () => coreInjectableModule.secureStorage(),
     );
@@ -66,6 +83,7 @@ extension GetItInjectableX on _i174.GetIt {
         fss: gh<_i558.FlutterSecureStorage>(),
       ),
     );
+
     gh.factory<_i589.UserHelper>(
       () => _i589.UserHelper(
         gh<_i460.SharedPreferences>(),
@@ -75,10 +93,26 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i4.QuestionsRemoteDataSourceContract>(
       () => _i450.QuestionsRemoteDataSourceImpl(gh<_i849.QuestionsApiClient>()),
     );
+    gh.factory<_i171.ResultsLocalDataSource>(
+      () => _i677.ResultsLocalDataSourceImpl(gh<_i976.IsarService>()),
+    );
+    gh.factory<_i487.ResultsRepositoryContract>(
+      () => _i383.ResultsRepositoryImpl(gh<_i171.ResultsLocalDataSource>()),
+    );
+
+    gh.factory<_i474.GetAllResultsUseCase>(
+      () => _i474.GetAllResultsUseCase(gh<_i487.ResultsRepositoryContract>()),
+    );
+    gh.factory<_i799.SaveResultUseCase>(
+      () => _i799.SaveResultUseCase(gh<_i487.ResultsRepositoryContract>()),
+    );
     gh.factory<_i358.QuestionsRepositoryContract>(
       () => _i416.QuestionsRepositoryImpl(
         gh<_i4.QuestionsRemoteDataSourceContract>(),
       ),
+    );
+    gh.factory<_i10.ResultsCubit>(
+      () => _i10.ResultsCubit(gh<_i474.GetAllResultsUseCase>()),
     );
     gh.factory<_i216.GetQuestionsByExamIdUseCase>(
       () => _i216.GetQuestionsByExamIdUseCase(
@@ -86,7 +120,10 @@ extension GetItInjectableX on _i174.GetIt {
       ),
     );
     gh.factory<_i875.QuestionsCubit>(
-      () => _i875.QuestionsCubit(gh<_i216.GetQuestionsByExamIdUseCase>()),
+      () => _i875.QuestionsCubit(
+        gh<_i216.GetQuestionsByExamIdUseCase>(),
+        gh<_i799.SaveResultUseCase>(),
+      ),
     );
     return this;
   }
