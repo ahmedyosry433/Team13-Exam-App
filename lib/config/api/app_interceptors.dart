@@ -29,6 +29,13 @@ class AppInterceptors extends Interceptor {
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ZTEyZjViMDRkYTBkNGNmNTU2YTdlOSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzc2MzY1NDAzfQ.uXt2mGOY2_l1Xzk-wAbLQ6IzzxDkyVwuYLiwpQRnA2k";
       options.headers[Apikeys.token] = authToken;
     //}
+    // if (authToken != null && authToken.isNotEmpty) {
+    // options.headers['Authorization'] = 'Bearer $authToken';
+
+    authToken =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ZTEyZjViMDRkYTBkNGNmNTU2YTdlOSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzc2MzY1NDAzfQ.uXt2mGOY2_l1Xzk-wAbLQ6IzzxDkyVwuYLiwpQRnA2k";
+    options.headers[Apikeys.token] = authToken;
+    // }
     super.onRequest(options, handler);
   }
 

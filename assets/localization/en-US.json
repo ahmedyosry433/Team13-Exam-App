@@ -19,7 +19,14 @@
         "delete": "Delete",
         "no_internet": "No internet connection!",
         "check_internet": "Check your internet connection and try again.",
-        "logout_success": "Logged out successfully"
+        "logout_success": "Logged out successfully",
+        "Back": "Back",
+        "Next": "Next",
+        "finish": "Finish",
+        "exam": "Exam",
+        "view_score": "View score",
+        "time_out": "Time out",
+        "start_again": "Start again"
     },
     "custom_widget": {
         "loading": "Loading...",
@@ -121,5 +128,11 @@
         "result": "Result",
         "profile": "Profile"
 
+    "questions": {
+        "question_of_total": "Question {current} of {total}",
+        "show_results": "Show results",
+        "exam_score": "Exam score",
+        "correct": "Correct",
+        "incorrect": "Incorrect"
     }
 }

@@ -5,4 +5,7 @@ abstract class Routes {
   static const String forgetPassword = '/forgetPassword';
    static const String homepage = '/home';
    static const String navbar = '/navbar';
+  static const String question = '/question';
+
+  static const String getExamOnSubject = '/getExamOnSubject';
 }

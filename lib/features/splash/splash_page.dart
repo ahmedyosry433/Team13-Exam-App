@@ -46,6 +46,7 @@ class _SplashPageState extends State<SplashPage>
     Timer(const Duration(seconds: 4), () {
       if (mounted) {
         context.go(Routes.navbar);
+        context.go(Routes.getExamOnSubject);
       }
     });
   }
