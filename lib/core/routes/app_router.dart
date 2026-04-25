@@ -8,6 +8,8 @@ import 'package:exam_app/features/auth/register/presentation/view/pages/register
 import 'package:exam_app/features/auth/register/presentation/view_model/cubit/register_cubit.dart';
 import 'package:exam_app/features/forget_password/presentation/view/pages/forget_password_page.dart';
 import 'package:exam_app/features/get_exam_on_subject/presentation/view/pages/get_exam_on_subject_page.dart';
+import 'package:exam_app/features/edit_profile/presentation/view/pages/edit_profile_screen.dart';
+import 'package:exam_app/features/edit_profile/presentation/view_model/cubit/edit_profile_cubit.dart';
 import 'package:exam_app/features/splash/splash_page.dart';
 import 'package:exam_app/features/results/presentation/view/pages/results_page.dart';
 import 'package:exam_app/features/questions/presentation/view_model/cubit/questions_cubit.dart';
@@ -63,6 +65,13 @@ final GoRouter router = GoRouter(
       route: Routes.getExamOnSubject,
       page: (state, context) => GetExamOnSubjectPage(
         pageTitle: 'Exam Subjects', // static مؤقتاً
+      ),
+    ),
+    _customAnimatedGoRoute(
+      route: Routes.editProfile,
+      page: (state, context) => BlocProvider(
+        create: (_) => getIt<EditProfileCubit>(),
+        child: const EditProfileScreen(),
       ),
     ),
   ],

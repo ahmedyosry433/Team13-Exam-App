@@ -12,4 +12,7 @@ class AppEndPoints {
   static const String question = '$baseUrl/questions';
 
   static const String getExamOnSubject = '/exams';
+  static const String loggedUserInfo = '/auth/profileData';
+  static const String editProfile = '/auth/editProfile';
+  static const String changePassword = '/auth/changePassword';
 }
