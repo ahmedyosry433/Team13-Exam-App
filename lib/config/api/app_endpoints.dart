@@ -10,4 +10,6 @@ class AppEndPoints {
   static const String getProductsEndpoint = '$baseUrl/products';
   static const String getCategoriesEndpoint = '$baseUrl/categories';
   static const String question = '$baseUrl/questions';
+
+  static const String getExamOnSubject = '/exams';
 }
