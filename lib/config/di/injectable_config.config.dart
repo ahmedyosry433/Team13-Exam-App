@@ -44,6 +44,18 @@ import '../../features/auth/register/domain/use_case/register_use_case.dart'
     as _i21;
 import '../../features/auth/register/presentation/view_model/cubit/register_cubit.dart'
     as _i444;
+import '../../features/edit_profile/api/api_client/edit_profile_api_client.dart'
+    as _i690;
+import '../../features/edit_profile/api/datasources/edit_profile_remote_data_source_impl.dart'
+    as _i368;
+import '../../features/edit_profile/data/datasources/edit_profile_remote_data_source_contract.dart'
+    as _i129;
+import '../../features/edit_profile/data/repositories/edit_profile_repository_impl.dart'
+    as _i337;
+import '../../features/edit_profile/domain/repositories/edit_profile_repository.dart'
+    as _i698;
+import '../../features/edit_profile/domain/use_cases/edit_profile_use_case.dart'
+    as _i406;
 import '../../features/forget_password/api/api_client/forget_password_api_client.dart'
     as _i892;
 import '../../features/forget_password/api/datasources/forget_password_remote_data_source_impl.dart'
@@ -134,6 +146,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i32.SigninApi>(() => _i32.SigninApi(gh<_i361.Dio>()));
     gh.factory<_i517.SignupApi>(() => _i517.SignupApi(gh<_i361.Dio>()));
+    gh.factory<_i690.EditProfileApiClient>(
+      () => _i690.EditProfileApiClient(gh<_i361.Dio>()),
+    );
     gh.factory<_i892.ForgetPasswordApiClient>(
       () => _i892.ForgetPasswordApiClient(gh<_i361.Dio>()),
     );
@@ -171,6 +186,16 @@ extension GetItInjectableX on _i174.GetIt {
             gh<_i913.ForgetPasswordRemoteDataSourceContract>(),
       ),
     );
+    gh.factory<_i129.EditProfileRemoteDataSourceContract>(
+      () => _i368.EditProfileRemoteDataSourceImpl(
+        gh<_i690.EditProfileApiClient>(),
+      ),
+    );
+    gh.factory<_i698.EditProfileRepository>(
+      () => _i337.EditProfileRepositoryImpl(
+        gh<_i129.EditProfileRemoteDataSourceContract>(),
+      ),
+    );
     gh.factory<_i294.ResultsLocalDataSource>(
       () => _i756.ResultsLocalDataSourceImpl(gh<_i279.IsarService>()),
     );
@@ -184,6 +209,9 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i460.SharedPreferences>(),
         gh<_i558.FlutterSecureStorage>(),
       ),
+    );
+    gh.factory<_i406.EditProfileUseCase>(
+      () => _i406.EditProfileUseCase(gh<_i698.EditProfileRepository>()),
     );
     gh.factory<_i4.QuestionsRemoteDataSourceContract>(
       () => _i450.QuestionsRemoteDataSourceImpl(gh<_i849.QuestionsApiClient>()),
