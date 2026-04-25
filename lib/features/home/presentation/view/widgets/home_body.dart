@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:exam_app/core/languages/locale_keys.g.dart';
+import 'package:exam_app/core/routes/routes.dart';
 import 'package:exam_app/core/theme/app_colors.dart';
 import 'package:exam_app/core/theme/app_text_style.dart';
 import 'package:exam_app/features/home/presentation/view/widgets/home_card.dart';
@@ -7,6 +8,7 @@ import 'package:exam_app/features/home/presentation/view/widgets/home_search.dar
 import 'package:exam_app/features/home/presentation/view_model/cubit/home_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class HomeBody extends StatelessWidget {
   const HomeBody({super.key});
@@ -27,13 +29,13 @@ class HomeBody extends StatelessWidget {
             ),
           ),
           BlocBuilder<HomeCubit, SubjectsState>(
-            builder: (context, State) {
-              return State.getsubjectsState.when(
+            builder: (context, state) {
+              return state.getsubjectsState.when(
                 initial: () => const Center(child: CircularProgressIndicator()),
                 loading: () => const Center(child: CircularProgressIndicator()),
-      
+
                 success: (_) {
-                   final subjects = State.filteredSubjects;
+                  final subjects = state.filteredSubjects;
                   if (subjects.isEmpty) {
                     return const Center(child: Text("No subjects"));
                   }
@@ -46,7 +48,13 @@ class HomeBody extends StatelessWidget {
                         title: subject.name ?? "",
                         imagePath: subject.icon ?? '',
                         onTap: () {
-                          print(subject.id);
+                          context.push(
+                            Routes.getExamOnSubject,
+                            extra: {
+                              "title": subject.name,
+                              "subjectId": subject.id,
+                            },
+                          );
                         },
                       );
                     },

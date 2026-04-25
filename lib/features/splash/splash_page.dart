@@ -54,9 +54,9 @@ class _SplashPageState extends State<SplashPage>
     if (!mounted) return;
 
     if (token != null) {
-      context.go(Routes.getExamOnSubject);
+      context.go(Routes.navbar);
     } else {
-      context.go(Routes.getExamOnSubject);
+      context.go(Routes.login);
     }
   }
 

@@ -12,6 +12,7 @@ import 'package:exam_app/features/navigation/navbar_page.dart';
 import 'package:exam_app/features/get_exam_on_subject/presentation/view/pages/get_exam_on_subject_page.dart';
 import 'package:exam_app/features/edit_profile/presentation/view/pages/edit_profile_screen.dart';
 import 'package:exam_app/features/edit_profile/presentation/view_model/cubit/edit_profile_cubit.dart';
+import 'package:exam_app/features/questions/presentation/view/pages/questions_page.dart';
 import 'package:exam_app/features/splash/splash_page.dart';
 import 'package:exam_app/features/results/presentation/view/pages/results_page.dart';
 import 'package:exam_app/features/questions/presentation/view_model/cubit/questions_cubit.dart';
@@ -69,10 +70,21 @@ final GoRouter router = GoRouter(
       },
     ),
     _customAnimatedGoRoute(
+      route: Routes.question,
+      page: (state, context) {
+        final exam = state.extra as Map<String, dynamic>;
+        return QuestionsPage(examId: exam['examId']);
+      },
+    ),
+    _customAnimatedGoRoute(
       route: Routes.getExamOnSubject,
-      page: (state, context) => GetExamOnSubjectPage(
-        pageTitle: 'Exam Subjects', // static مؤقتاً
-      ),
+      page: (state, context) {
+        final subject = state.extra as Map<String, dynamic>;
+        return GetExamOnSubjectPage(
+          pageTitle: subject['title'],
+          subjectId: subject['subjectId'],
+        );
+      },
     ),
     _customAnimatedGoRoute(
       route: Routes.editProfile,

@@ -127,6 +127,7 @@
         "explore": "استكشف",
         "result": "النتيجة",
         "profile": "الملف الشخصي"
+    },
     "questions": {
         "question_of_total": "السؤال {current} من {total}",
         "show_results": "عرض النتيجة",

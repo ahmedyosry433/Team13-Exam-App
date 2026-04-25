@@ -7,7 +7,9 @@ import 'package:exam_app/features/edit_profile/presentation/view_model/cubit/edi
 import 'package:exam_app/features/edit_profile/presentation/view_model/cubit/edit_profile_states.dart';
 import 'package:exam_app/features/validations/validations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
 
+@Injectable()
 class EditProfileCubit extends Cubit<EditProfileStates> {
   final EditProfileUseCase _editProfileUseCase;
 
@@ -126,11 +128,7 @@ class EditProfileCubit extends Cubit<EditProfileStates> {
   void clearEditSuccessToast() {
     if (!state.showEditSuccessToast) return;
 
-    emit(
-      state.copyWith(
-        showEditSuccessToast: false,
-      ),
-    );
+    emit(state.copyWith(showEditSuccessToast: false));
   }
 
   Future<void> _editProfile(EditProfileRequest editProfileRequest) async {
@@ -141,9 +139,7 @@ class EditProfileCubit extends Cubit<EditProfileStates> {
       ),
     );
 
-    final result = await _editProfileUseCase.editProfile(
-       editProfileRequest,
-    );
+    final result = await _editProfileUseCase.editProfile(editProfileRequest);
 
     result.when(
       success: (data) {
@@ -176,9 +172,7 @@ class EditProfileCubit extends Cubit<EditProfileStates> {
       ),
     );
 
-    final result = await _editProfileUseCase.changePassword(
-       request,
-    );
+    final result = await _editProfileUseCase.changePassword(request);
 
     result.when(
       success: (data) {

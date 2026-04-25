@@ -7,18 +7,20 @@ import 'package:get_it/get_it.dart';
 
 class GetExamOnSubjectPage extends StatelessWidget {
   final String pageTitle;
+  final String subjectId;
 
-  // TODO: remove when subjects branch is merged
-  static const String _tempSubjectId = '69d980107c82914570305dc3';
-
-  const GetExamOnSubjectPage({super.key, required this.pageTitle});
+  const GetExamOnSubjectPage({
+    super.key,
+    required this.pageTitle,
+    required this.subjectId,
+  });
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) =>
           GetIt.I<GetExamOnSubjectCubit>()
-            ..doevent(GetExamOnSubjectEvent(subjectId: _tempSubjectId)),
+            ..doevent(GetExamOnSubjectEvent(subjectId: subjectId)),
       child: GetExamOnSubjectBody(pageTitle: pageTitle),
     );
   }

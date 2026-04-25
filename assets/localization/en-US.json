@@ -128,7 +128,7 @@
         "explore": "Explore",
         "result": "Result",
         "profile": "Profile"
-
+    },
     "questions": {
         "question_of_total": "Question {current} of {total}",
         "show_results": "Show results",

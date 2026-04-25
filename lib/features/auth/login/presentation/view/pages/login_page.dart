@@ -49,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
       child: BlocConsumer<LoginCubit, LoginState>(
         listener: (context, state) {
           if (state.loginSuccess == true) {
-            context.go(Routes.home);
+            context.go(Routes.navbar);
           }
         },
         builder: (context, state) {

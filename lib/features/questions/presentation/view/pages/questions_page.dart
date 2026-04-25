@@ -12,14 +12,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class QuestionsPage extends StatelessWidget {
-  const QuestionsPage({super.key});
+  final String examId;
+  const QuestionsPage({super.key, required this.examId});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
           getIt.get<QuestionsCubit>()
-            ..doIndented(GetQuestionsEvent(examId: "")),
+            ..doIndented(GetQuestionsEvent(examId: examId)),
       child: BlocBuilder<QuestionsCubit, QuestionsStates>(
         buildWhen: (previous, current) =>
             previous.submitExamState != current.submitExamState,

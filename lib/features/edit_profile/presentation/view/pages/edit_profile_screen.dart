@@ -1,4 +1,6 @@
 import 'package:exam_app/config/base_state/base_state.dart';
+import 'package:exam_app/config/di/injectable_config.dart';
+import 'package:exam_app/core/routes/routes.dart';
 import 'package:exam_app/core/shared/widgets/custom_button.dart';
 import 'package:exam_app/core/shared/widgets/custom_toast.dart';
 import 'package:exam_app/core/theme/app_colors.dart';
@@ -14,6 +16,7 @@ import 'package:exam_app/features/validations/validations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:toastification/toastification.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -33,11 +36,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final _phoneController = TextEditingController();
 
   bool _didFillUserData = false;
+  late EditProfileCubit _editProfileCubit;
 
   @override
   void initState() {
     super.initState();
-    context.read<EditProfileCubit>().doEvents(GetLoggedUserInfoEvent());
+    _editProfileCubit = getIt.get<EditProfileCubit>();
+    _editProfileCubit.doEvents(GetLoggedUserInfoEvent());
   }
 
   @override
@@ -68,9 +73,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   void _onUpdatePressed() {
     if (!(_formKey.currentState?.validate() ?? false)) return;
 
-    context.read<EditProfileCubit>().updateProfile(
-          lastName: _lastNameController.text,
-        );
+    _editProfileCubit.updateProfile(lastName: _lastNameController.text);
   }
 
   void _goToResetPassword() {
@@ -78,7 +81,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       context,
       MaterialPageRoute(
         builder: (_) => BlocProvider.value(
-          value: context.read<EditProfileCubit>(),
+          value: _editProfileCubit,
           child: const ResetPasswordScreen(),
         ),
       ),
@@ -87,150 +90,151 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.whiteF9,
-      appBar: AppBar(
+    return BlocProvider.value(
+      value: _editProfileCubit,
+      child: Scaffold(
         backgroundColor: AppColors.whiteF9,
-        elevation: 0,
-        centerTitle: true,
-        title: Text(
-          'Edit profile',
-          style: 20.medium.copyWith(color: AppColors.black0C),
+        appBar: AppBar(
+          backgroundColor: AppColors.whiteF9,
+          elevation: 0,
+          centerTitle: true,
+          title: Text(
+            'Edit profile',
+            style: 20.medium.copyWith(color: AppColors.black0C),
+          ),
         ),
-      ),
-      body: BlocConsumer<EditProfileCubit, EditProfileStates>(
-        listener: (context, state) {
-          if (state.loggedUserInfoState.state == StateType.success) {
-            _fillUserData(state);
-          }
+        body: BlocConsumer<EditProfileCubit, EditProfileStates>(
+          listener: (context, state) {
+            if (state.loggedUserInfoState.state == StateType.success) {
+              _fillUserData(state);
+            }
 
-          if (state.showEditSuccessToast) {
-            CustomToast(
-              context: context,
-              header: 'Success',
-              description: state.editProfileState.data?.message ??
-                  'Profile updated successfully',
-            ).showToast();
+            if (state.showEditSuccessToast) {
+              CustomToast(
+                context: context,
+                header: 'Succ ess',
+                description:
+                    state.editProfileState.data?.message ??
+                    'Profile updated successfully',
+              ).showToast();
 
-            context.read<EditProfileCubit>().clearEditSuccessToast();
-          }
+              _editProfileCubit.clearEditSuccessToast();
+            }
 
-          if (state.editProfileState.state == StateType.error) {
-            CustomToast(
-              context: context,
-              header: 'Error',
-              description: state.editProfileState.exception?.toString(),
-              type: ToastificationType.error,
-            ).showToast();
-          }
-        },
-        builder: (context, state) {
-          final isProfileLoading =
-              state.editProfileState.state == StateType.loading;
+            if (state.editProfileState.state == StateType.error) {
+              CustomToast(
+                context: context,
+                description: state.editProfileState.exception?.toString(),
+                type: ToastificationType.error,
+              ).showToast();
+            }
+          },
+          builder: (context, state) {
+            final isProfileLoading =
+                state.editProfileState.state == StateType.loading;
 
-          final isUserLoading =
-              state.loggedUserInfoState.state == StateType.loading;
+            final isUserLoading =
+                state.loggedUserInfoState.state == StateType.loading;
 
-          if (isUserLoading && !_didFillUserData) {
-            return const Center(
-              child: CircularProgressIndicator(
-                color: AppColors.primaryLight,
-              ),
-            );
-          }
+            if (isUserLoading && !_didFillUserData) {
+              return const Center(
+                child: CircularProgressIndicator(color: AppColors.primaryLight),
+              );
+            }
 
-          return SafeArea(
-            child: SingleChildScrollView(
-              padding: EdgeInsetsDirectional.symmetric(
-                horizontal: 20.w,
-                vertical: 16.h,
-              ),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    const ProfileEmptyAvatar(),
-                    SizedBox(height: 28.h),
+            return SafeArea(
+              child: SingleChildScrollView(
+                padding: EdgeInsetsDirectional.symmetric(
+                  horizontal: 20.w,
+                  vertical: 16.h,
+                ),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      const ProfileEmptyAvatar(),
+                      SizedBox(height: 28.h),
 
-                    ProfileField(
-                      title: 'User name',
-                      hintText: 'User name',
-                      controller: _userNameController,
-                      validator: Validations.validateUserName,
-                      isReadOnly: false,
-                    ),
-                    SizedBox(height: 16.h),
+                      ProfileField(
+                        title: 'User name',
+                        hintText: 'User name',
+                        controller: _userNameController,
+                        validator: Validations.validateUserName,
+                        isReadOnly: false,
+                      ),
+                      SizedBox(height: 16.h),
 
-                    Row(
-                      children: [
-                        Expanded(
-                          child: ProfileField(
-                            title: 'First name',
-                            hintText: 'First name',
-                            controller: _firstNameController,
-                            validator: Validations.validateName,
-                            isReadOnly: false,
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ProfileField(
+                              title: 'First name',
+                              hintText: 'First name',
+                              controller: _firstNameController,
+                              validator: Validations.validateName,
+                              isReadOnly: false,
+                            ),
                           ),
-                        ),
-                        SizedBox(width: 12.w),
-                        Expanded(
-                          child: ProfileField(
-                            title: 'Last name',
-                            hintText: 'Last name',
-                            controller: _lastNameController,
-                            validator: Validations.validateName,
-                            isReadOnly: false,
-                            onChanged: (value) {
-                              context
-                                  .read<EditProfileCubit>()
-                                  .onLastNameChanged(value ?? '');
-                            },
+                          SizedBox(width: 12.w),
+                          Expanded(
+                            child: ProfileField(
+                              title: 'Last name',
+                              hintText: 'Last name',
+                              controller: _lastNameController,
+                              validator: Validations.validateName,
+                              isReadOnly: false,
+                              onChanged: (value) {
+                                context
+                                    .read<EditProfileCubit>()
+                                    .onLastNameChanged(value ?? '');
+                              },
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 16.h),
+                        ],
+                      ),
+                      SizedBox(height: 16.h),
 
-                    ProfileField(
-                      title: 'Email',
-                      hintText: 'Email',
-                      controller: _emailController,
-                      validator: Validations.validateEmail,
-                      isReadOnly: false,
-                      keyboardType: TextInputType.emailAddress,
-                    ),
-                    SizedBox(height: 16.h),
+                      ProfileField(
+                        title: 'Email',
+                        hintText: 'Email',
+                        controller: _emailController,
+                        validator: Validations.validateEmail,
+                        isReadOnly: false,
+                        keyboardType: TextInputType.emailAddress,
+                      ),
+                      SizedBox(height: 16.h),
 
-                    PasswordChangeTile(onChangeTap: _goToResetPassword),
-                    SizedBox(height: 16.h),
+                      PasswordChangeTile(onChangeTap: _goToResetPassword),
+                      SizedBox(height: 16.h),
 
-                    ProfileField(
-                      title: 'Phone number',
-                      hintText: 'Phone number',
-                      controller: _phoneController,
-                      isReadOnly: false,
-                      keyboardType: TextInputType.phone,
-                    ),
-                    SizedBox(height: 32.h),
+                      ProfileField(
+                        title: 'Phone number',
+                        hintText: 'Phone number',
+                        controller: _phoneController,
+                        isReadOnly: false,
+                        keyboardType: TextInputType.phone,
+                      ),
+                      SizedBox(height: 32.h),
 
-                    CustomButton(
-                      title: 'Update',
-                      isLoading: isProfileLoading,
-                      onTap: state.isProfileChanged && !isProfileLoading
-                          ? _onUpdatePressed
-                          : null,
-                      radius: 14.r,
-                      height: 54.h,
-                      backGroundColor: state.isProfileChanged
-                          ? AppColors.primaryLight
-                          : AppColors.gray87,
-                    ),
-                  ],
+                      CustomButton(
+                        title: 'Update',
+                        isLoading: isProfileLoading,
+                        onTap: state.isProfileChanged && !isProfileLoading
+                            ? _onUpdatePressed
+                            : null,
+                        radius: 14.r,
+                        height: 54.h,
+                        backGroundColor: state.isProfileChanged
+                            ? AppColors.primaryLight
+                            : AppColors.gray87,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

@@ -1,4 +1,5 @@
 // ignore: depend_on_referenced_packages
+
 import 'package:bloc/bloc.dart';
 import 'package:exam_app/config/di/injectable_config.dart';
 import 'package:exam_app/config/error/failures.dart';
@@ -35,15 +36,19 @@ class LoginCubit extends Cubit<LoginState> {
       ),
     );
 
-     if (!AuthValidators.isValidEmail(email)) {
+    if (!AuthValidators.isValidEmail(email)) {
       emit(state.copyWith(isLoading: false, emailError: AuthConsts.erroremail));
       return;
     }
     if (!AuthValidators.isValidPassword(password)) {
-      emit(state.copyWith(isLoading: false, passwordError: AuthConsts.errorpassword));
+      emit(
+        state.copyWith(
+          isLoading: false,
+          passwordError: AuthConsts.errorpassword,
+        ),
+      );
       return;
     }
-    
 
     final result = await _loginUseCase(
       SigninRequest(email: email, password: password),
@@ -51,11 +56,11 @@ class LoginCubit extends Cubit<LoginState> {
 
     result.when(
       success: (entity) async {
-        if (state.rememberMe) {
-          await _fss.write(key: 'token', value: entity!.token);
-        } else {
-          await _fss.delete(key: 'token');
-        }
+        // if (state.rememberMe) {
+        // } else {
+        //   await _fss.delete(key: 'token');
+        // }
+
         emit(state.copyWith(isLoading: false, loginSuccess: true));
       },
       error: (exception) {

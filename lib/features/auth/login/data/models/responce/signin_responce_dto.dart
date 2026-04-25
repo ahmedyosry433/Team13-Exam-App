@@ -36,19 +36,17 @@ class Dto {
     this.createdAt,
   });
 
-  
   SigninEntity toDomain() => SigninEntity(
-        username: username ?? '',
-        firstName: firstName ?? '',
-        lastName: lastName ?? '',
-        email: email ?? '',
-        phone: phone ?? '',
-        role: role ?? '',
-        isVerified: isVerified ?? false,
-        id: id ?? '',
-        createdAt: createdAt ?? DateTime.now(),
-      );
-
+    username: username ?? '',
+    firstName: firstName ?? '',
+    lastName: lastName ?? '',
+    email: email ?? '',
+    phone: phone ?? '',
+    role: role ?? '',
+    isVerified: isVerified ?? false,
+    id: id ?? '',
+    createdAt: createdAt ?? DateTime.now(),
+  );
 
   factory Dto.fromJson(Map<String, dynamic> json) => _$DtoFromJson(json);
   Map<String, dynamic> toJson() => _$DtoToJson(this);

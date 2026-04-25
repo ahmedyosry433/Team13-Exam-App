@@ -17,7 +17,11 @@ class GetExamOnSubjectBody extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, size: AppSize.s20, color: AppColors.onBackgroundLight),
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            size: AppSize.s20,
+            color: AppColors.onBackgroundLight,
+          ),
           onPressed: () => Navigator.of(context).maybePop(),
         ),
         title: Text(pageTitle),
@@ -35,7 +39,8 @@ class GetExamOnSubjectBody extends StatelessWidget {
               return ListView.separated(
                 padding: const EdgeInsets.all(AppSize.s16),
                 itemCount: exams.length,
-                separatorBuilder: (_, __) => const SizedBox(height: AppSize.s10),
+                separatorBuilder: (_, __) =>
+                    const SizedBox(height: AppSize.s10),
                 itemBuilder: (context, index) {
                   final exam = exams[index];
                   return ExamCard(
@@ -50,6 +55,7 @@ class GetExamOnSubjectBody extends StatelessWidget {
                           duration: exam.duration ?? 0,
                           numberOfQuestions: exam.numberOfQuestions ?? 0,
                           pageTitle: pageTitle,
+                          examId: exam.id ?? '',
                         ),
                       ),
                     ),

@@ -45,20 +45,20 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     final rePassword = _confirmPasswordController.text;
 
     context.read<EditProfileCubit>().onPasswordFieldsChanged(
-          oldPassword: oldPassword,
-          password: password,
-          rePassword: rePassword,
-        );
+      oldPassword: oldPassword,
+      password: password,
+      rePassword: rePassword,
+    );
   }
 
   void _onUpdatePressed() {
     if (!(_formKey.currentState?.validate() ?? false)) return;
 
     context.read<EditProfileCubit>().changePassword(
-          oldPassword: _oldPasswordController.text,
-          password: _newPasswordController.text,
-          rePassword: _confirmPasswordController.text,
-        );
+      oldPassword: _oldPasswordController.text,
+      password: _newPasswordController.text,
+      rePassword: _confirmPasswordController.text,
+    );
   }
 
   @override
@@ -80,7 +80,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             CustomToast(
               context: context,
               header: 'Success',
-              description: state.changePasswordState.data?.message ??
+              description:
+                  state.changePasswordState.data?.message ??
                   'Password changed successfully',
             ).showToast();
 

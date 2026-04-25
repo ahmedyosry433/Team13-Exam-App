@@ -38,9 +38,7 @@ class QuestionsCubit extends Cubit<QuestionsStates> {
 
   Future<void> _getQuestions(String examId) async {
     emit(state.copyWith(getQuestionsState: const BaseState.loading()));
-    final result = await _getQuestionsByExamIdUseCase(
-      "69d980117c82914570305dd5",
-    );
+    final result = await _getQuestionsByExamIdUseCase(examId);
     result.when(
       success: (questions) {
         emit(
