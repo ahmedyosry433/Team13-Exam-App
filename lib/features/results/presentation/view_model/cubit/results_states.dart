@@ -1,12 +1,12 @@
 part of 'results_cubit.dart';
 
 class ResultsStates extends Equatable {
-  final BaseState<List<ExamResultCollection>>? getAllResultsState;
+  final BaseState<List<QuestionsResult>>? getAllResultsState;
 
   const ResultsStates({this.getAllResultsState});
 
   ResultsStates copyWith({
-    BaseState<List<ExamResultCollection>>? getAllResultsState,
+    BaseState<List<QuestionsResult>>? getAllResultsState,
   }) {
     return ResultsStates(
       getAllResultsState: getAllResultsState ?? this.getAllResultsState,

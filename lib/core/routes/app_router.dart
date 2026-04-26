@@ -15,6 +15,7 @@ import 'package:exam_app/features/edit_profile/presentation/view_model/cubit/edi
 import 'package:exam_app/features/questions/presentation/view/pages/questions_page.dart';
 import 'package:exam_app/features/splash/splash_page.dart';
 import 'package:exam_app/features/results/presentation/view/pages/results_page.dart';
+import 'package:exam_app/features/results/presentation/view/pages/all_results_history_page.dart';
 import 'package:exam_app/features/questions/presentation/view_model/cubit/questions_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -76,6 +77,7 @@ final GoRouter router = GoRouter(
         return QuestionsPage(examId: exam['examId']);
       },
     ),
+
     _customAnimatedGoRoute(
       route: Routes.getExamOnSubject,
       page: (state, context) {
@@ -92,6 +94,10 @@ final GoRouter router = GoRouter(
         create: (_) => getIt<EditProfileCubit>(),
         child: const EditProfileScreen(),
       ),
+    ),
+    _customAnimatedGoRoute(
+      route: Routes.history,
+      page: (state, context) => const AllResultsHistoryPage(),
     ),
   ],
 );

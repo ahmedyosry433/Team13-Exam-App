@@ -57,13 +57,19 @@ class QuestionsResult extends Equatable {
   final double scorePercentage;
   final List<QuestionEntity> questions;
   final Map<int, List<String>> selectedAnswers;
+  final int? durationMinutes;
+  final int? totalQuestions;
+  final int? takenDurationMinutes;
 
   const QuestionsResult({
-    required this.correctCount,
-    required this.incorrectCount,
-    required this.scorePercentage,
-    required this.questions,
-    required this.selectedAnswers,
+    this.correctCount = 0,
+    this.incorrectCount = 0,
+    this.scorePercentage = 0,
+    this.questions = const [],
+    this.selectedAnswers = const {},
+    this.durationMinutes,
+    this.totalQuestions,
+    this.takenDurationMinutes,
   });
 
   @override
@@ -73,5 +79,8 @@ class QuestionsResult extends Equatable {
     scorePercentage,
     questions,
     selectedAnswers,
+    durationMinutes,
+    totalQuestions,
+    takenDurationMinutes,
   ];
 }
