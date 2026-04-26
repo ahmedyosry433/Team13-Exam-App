@@ -5,14 +5,18 @@ import 'package:exam_app/core/theme/app_colors.dart';
 import 'package:exam_app/core/values/app_images.dart';
 import 'package:exam_app/features/edit_profile/presentation/view/pages/edit_profile_screen.dart';
 import 'package:exam_app/features/home/presentation/view/pages/home_page.dart';
-import 'package:exam_app/features/home/presentation/view/pages/result_page.dart';
+import 'package:exam_app/features/results/presentation/view/pages/all_results_history_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 // ignore: must_be_immutable
 class NavbarPage extends StatelessWidget {
   NavbarPage({super.key});
-  List<Widget> pages = [HomePage(), ResultPage(), EditProfileScreen()];
+  List<Widget> pages = [
+    HomePage(),
+    AllResultsHistoryPage(),
+    EditProfileScreen(),
+  ];
 
   @override
   Widget build(BuildContext context) {
