@@ -3,14 +3,11 @@
 import 'package:bloc/bloc.dart';
 import 'package:exam_app/config/di/injectable_config.dart';
 import 'package:exam_app/config/error/failures.dart';
-import 'package:exam_app/core/routes/routes.dart';
 import 'package:exam_app/features/auth/common/auth_consts/auth_consts.dart';
 import 'package:exam_app/features/auth/common/auth_consts/auth_validators/auth_validaters.dart';
 import 'package:exam_app/features/auth/login/data/models/request/signin_request.dart';
 import 'package:exam_app/features/auth/login/domain/use_case/login_use_case.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
 
 part 'login_state.dart';
@@ -70,12 +67,5 @@ class LoginCubit extends Cubit<LoginState> {
         emit(state.copyWith(isLoading: false, generalError: message));
       },
     );
-  }
-
-  Future<void> autoLoginIfTokenExists(BuildContext context) async {
-    final token = await _fss.read(key: 'token');
-    if (token != null) {
-      context.push(Routes.home);
-    }
   }
 }

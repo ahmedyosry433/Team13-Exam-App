@@ -30,9 +30,6 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     _emailController.addListener(() => setState(() {}));
     _passwordController.addListener(() => setState(() {}));
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<LoginCubit>().autoLoginIfTokenExists(context);
-    });
   }
 
   @override

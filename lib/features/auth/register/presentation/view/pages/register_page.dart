@@ -28,7 +28,6 @@ class _RegisterPageState extends State<RegisterPage> {
   final _confirmPasswordController = TextEditingController();
   final _phoneController = TextEditingController();
 
-  
   bool _isPasswordHidden = true;
   bool _isConfirmPasswordHidden = true;
 
@@ -71,7 +70,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-     create: (_) => getIt<RegisterCubit>(),
+      create: (_) => getIt<RegisterCubit>(),
       child: BlocConsumer<RegisterCubit, RegisterState>(
         buildWhen: (previous, current) =>
             previous.isLoading != current.isLoading ||
@@ -85,7 +84,7 @@ class _RegisterPageState extends State<RegisterPage> {
             previous.generalError != current.generalError,
         listener: (context, state) {
           if (state.registerSuccess) {
-            context.go(Routes.home);
+            context.go(Routes.login);
           }
         },
         builder: (context, state) {
@@ -115,13 +114,14 @@ class _RegisterPageState extends State<RegisterPage> {
                     passwordError: state.passwordError,
                     confirmPasswordError: state.confirmPasswordError,
                     phoneError: state.phoneError,
-                   
+
                     isPasswordHidden: _isPasswordHidden,
                     isConfirmPasswordHidden: _isConfirmPasswordHidden,
                     onTogglePassword: () =>
                         setState(() => _isPasswordHidden = !_isPasswordHidden),
                     onToggleConfirmPassword: () => setState(
-                      () => _isConfirmPasswordHidden = !_isConfirmPasswordHidden,
+                      () =>
+                          _isConfirmPasswordHidden = !_isConfirmPasswordHidden,
                     ),
                   ),
                   if (state.generalError != null)
@@ -148,8 +148,8 @@ class _RegisterPageState extends State<RegisterPage> {
                               lastName: _lastNameController.text.trim(),
                               email: _emailController.text.trim(),
                               password: _passwordController.text.trim(),
-                              confirmPassword:
-                                  _confirmPasswordController.text.trim(),
+                              confirmPassword: _confirmPasswordController.text
+                                  .trim(),
                               phone: _phoneController.text.trim(),
                             ),
                             backGroundColor: _isFormReady
