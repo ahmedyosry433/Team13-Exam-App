@@ -2,6 +2,7 @@ import 'package:exam_app/core/routes/routes.dart';
 import 'package:exam_app/features/questions/presentation/view/pages/questions_page.dart';
 import 'package:exam_app/features/splash/splash_page.dart';
 import 'package:exam_app/features/results/presentation/view/pages/results_page.dart';
+import 'package:exam_app/features/results/presentation/view/pages/all_results_history_page.dart';
 import 'package:exam_app/features/questions/presentation/view_model/cubit/questions_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -26,6 +27,10 @@ final GoRouter router = GoRouter(
         final result = state.extra as QuestionsResult;
         return ResultsPage(result: result);
       },
+    ),
+    _customAnimatedGoRoute(
+      route: Routes.history,
+      page: (state, context) => const AllResultsHistoryPage(),
     ),
   ],
 );

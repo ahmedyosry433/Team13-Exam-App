@@ -26,7 +26,7 @@ class AppInterceptors extends Interceptor {
     // options.headers['Authorization'] = 'Bearer $authToken';
 
     authToken =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ZTEyZjViMDRkYTBkNGNmNTU2YTdlOSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzc2MzY1NDAzfQ.uXt2mGOY2_l1Xzk-wAbLQ6IzzxDkyVwuYLiwpQRnA2k";
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ZTEyZjViMDRkYTBkNGNmNTU2YTdlOSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzc3MTkxNDM2fQ.F6gkOpmaVWNZLeRViESmYPplZ79QGmu8cLuV3fmea3M";
     options.headers[Apikeys.token] = authToken;
     // }
     super.onRequest(options, handler);

@@ -1,6 +1,6 @@
-import 'package:exam_app/features/results/data/models/exam_result_collection.dart';
+import 'package:exam_app/features/questions/presentation/view_model/cubit/questions_cubit.dart';
 
 abstract class ResultsLocalDataSource {
-  Future<void> saveExamResult(ExamResultCollection result);
-  Future<List<ExamResultCollection>> getAllExamResults();
+  Future<void> saveExamResult(QuestionsResult result);
+  Future<List<QuestionsResult>> getAllExamResults();
 }

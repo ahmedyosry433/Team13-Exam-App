@@ -2,7 +2,8 @@ import 'dart:developer';
 
 import 'package:equatable/equatable.dart';
 import 'package:exam_app/config/base_state/base_state.dart';
-import 'package:exam_app/features/results/data/models/exam_result_collection.dart';
+import 'package:exam_app/features/questions/presentation/view_model/cubit/questions_cubit.dart';
+import 'package:exam_app/features/results/data/models/question_isar.dart';
 import 'package:exam_app/features/results/domain/use_cases/get_all_results_use_case.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';

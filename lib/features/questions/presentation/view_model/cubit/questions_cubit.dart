@@ -47,7 +47,7 @@ class QuestionsCubit extends Cubit<QuestionsStates> {
           state.copyWith(
             getQuestionsState: BaseState.success(questions),
             questions: questions,
-            secondsRemaining: questions?.first.exam?.duration ?? 0,
+            secondsRemaining: (questions?.first.exam?.duration ?? 0) * 60,
             selectedAnswers: {},
             currentIndex: 0,
             submitExamState: const BaseState.initial(),
@@ -116,6 +116,10 @@ class QuestionsCubit extends Cubit<QuestionsStates> {
     }
 
     final scorePercentage = (correctCount / state.questions.length) * 100;
+    final firstQuestion = state.questions.firstOrNull;
+    final totalDurationInSeconds =
+        (firstQuestion?.exam?.duration ?? 0) * 60; // Assuming API gives minutes
+    final takenSeconds = totalDurationInSeconds - state.secondsRemaining;
 
     final result = QuestionsResult(
       correctCount: correctCount,
@@ -123,10 +127,13 @@ class QuestionsCubit extends Cubit<QuestionsStates> {
       scorePercentage: scorePercentage,
       questions: state.questions,
       selectedAnswers: state.selectedAnswers,
+      durationMinutes: firstQuestion?.exam?.duration,
+      totalQuestions: state.questions.length,
+      takenDurationMinutes: (takenSeconds / 60).ceil(),
     );
 
     // Save the result to local database
-    _saveResultUseCase(result);
+    _saveResultUseCase.call(result);
 
     emit(state.copyWith(submitExamState: BaseState.success(result)));
   }
